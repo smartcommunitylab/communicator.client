@@ -18,7 +18,7 @@ import eu.trentorise.smartcampus.communicator.model.Notification;
 @ContextConfiguration("/spring/applicationContext.xml")
 public class TestClient {
 
-	private static final String AUTH_TOKEN = "b450a290-3086-41e7-8886-24c7cbd185e3";
+	private static final String AUTH_TOKEN = "";
 	@Autowired
 	private CommunicatorConnector communicatorConnector;
 
