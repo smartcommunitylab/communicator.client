@@ -34,6 +34,15 @@ public class CommunicatorConnector {
 		this.communicatorURL = serverURL + COMMUNICATORSERVICE;
 	}
 
+	/**
+	 * Get notifications of the user
+	 * @param since since date, in milliseconds (use 0L for every time)
+	 * @param position position in the result set
+	 * @param count number of results (use -1L for all)
+	 * @param token an authorization token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
 	public List<Notification> getNotifications(Long since, Integer position, Integer count, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + NOTIFICATION;
@@ -60,6 +69,13 @@ public class CommunicatorConnector {
 		}
 	}
 
+	/**
+	 * Get a notification by id
+	 * @param id a notification id
+	 * @param token an authorization token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
 	public Notification getNotification(String id, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + NOTIFICATION + id;
@@ -77,6 +93,12 @@ public class CommunicatorConnector {
 	}
 
 
+	/**
+	 * Create a notification
+	 * @param notification a notification
+	 * @param token an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
 	public void createNotification(Notification notification, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + NOTIFICATION;
@@ -92,6 +114,13 @@ public class CommunicatorConnector {
 		}
 	}
 
+	/**
+	 * Update a notification (only starred and labelIds values are currently updated)
+	 * @param notification a notification
+	 * @param id the id of the notification to update
+	 * @param token an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
 	public void updateNotification(Notification notification, String id, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + NOTIFICATION + id;
@@ -106,6 +135,12 @@ public class CommunicatorConnector {
 		}
 	}	
 	
+	/**
+	 * Delete a notification
+	 * @param id the id of the notification to delete
+	 * @param token an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
 	public void deleteNotification(String id, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + NOTIFICATION + id;
@@ -118,6 +153,13 @@ public class CommunicatorConnector {
 		}
 	}	
 	
+	/**
+	 * Send a notification as a user
+	 * @param notification a notification
+	 * @param users a list of user Ids
+	 * @param token an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
 	public void sendUserNotification(Notification notification, List<String> users, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + "send/user";
@@ -136,6 +178,14 @@ public class CommunicatorConnector {
 		}
 	}		
 	
+	/**
+	 * Send a notification as an application
+	 * @param notification a notification
+	 * @param appId an application id
+	 * @param users a list of user Ids
+	 * @param token an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
 	public void sendAppNotification(Notification notification, String appId, List<String> users, String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + "send/app/" + appId;
@@ -153,7 +203,5 @@ public class CommunicatorConnector {
 			throw new CommunicatorConnectorException(e);
 		}
 	}		
-	
-	
 	
 }

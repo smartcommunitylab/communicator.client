@@ -44,10 +44,12 @@ public class TestClient {
 	@Test
 	public void testCRUD() throws Exception {
 
-			// create notifications
+			// create two notifications
 			Notification notification = new Notification();
 			notification.setTitle("Test notification");
 			notification.setUser("39");
+			notification.setTimestamp(System.currentTimeMillis());
+			communicatorConnector.createNotification(notification, AUTH_TOKEN);
 			communicatorConnector.createNotification(notification, AUTH_TOKEN);
 
 			// get all notifications
@@ -56,6 +58,19 @@ public class TestClient {
 			Assert.assertNotSame(0, results.size());
 			System.out.println(results);
 			Notification notification2 = results.get(0);
+			
+			// get no future notifications
+			results = communicatorConnector.getNotifications(System.currentTimeMillis(), 0, -1, AUTH_TOKEN);
+			Assert.assertNotNull(results);
+			Assert.assertSame(0, results.size());
+			System.out.println(results);
+			
+			// get one notification
+			results = communicatorConnector.getNotifications(0L, 1, 1, AUTH_TOKEN);
+			Assert.assertNotNull(results);
+			Assert.assertSame(1, results.size());
+			System.out.println(results);			
+		
 			
 			notification = communicatorConnector.getNotification(notification2.getId(), AUTH_TOKEN);
 			Assert.assertNotNull(notification.getId());
