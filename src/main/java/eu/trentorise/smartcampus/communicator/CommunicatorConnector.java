@@ -368,7 +368,46 @@ public class CommunicatorConnector {
 	}
 	
 	/**
-	 * stores an user communicator account
+	 * regiter an user pushservice
+	 * 
+	 * @param authToken
+	 *            authentication token
+	 * @param registrationId
+	 *            user googleid to pushservice
+	 * @throws CommunicatorConnectorException 
+	 * @throws CommunicatorConnectorException
+	 */
+	public String registerUser(String authToken,String registrationId) throws CommunicatorConnectorException  {
+		
+		try {
+			String url = communicatorURL + "register/user/"  + appName ;
+			
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		//	String ids = mapper.writeValueAsString(userAccount);
+		Map<String, String> map = new TreeMap<String, String>();
+		map.put(REGISTRATIONID_HEADER, registrationId);
+			
+			
+			//String userAccountAsString = mapper.writeValueAsString(userAccount);
+			
+			String resp=HTTPConnector.doPostWithReturn(HttpMethod.POST, url, map, null,
+					"application/json", "application/json", authToken,"UTF-8");
+		
+			
+			return resp;
+			
+		} catch (Exception e) {
+			logger.error("Exception getting user accounts", e);
+			throw new CommunicatorConnectorException(e);
+		}
+		
+	}
+	
+	/**
+	 * stores an user pushservice
 	 * 
 	 * @param authToken
 	 *            authentication token
@@ -377,10 +416,10 @@ public class CommunicatorConnector {
 	 * @throws CommunicatorConnectorException 
 	 * @throws CommunicatorConnectorException
 	 */
-	public String registerUser(String authToken,String registrationId) throws CommunicatorConnectorException  {
+	public String unregisterUser(String authToken) throws CommunicatorConnectorException  {
 		
 		try {
-			String url = communicatorURL + "register/user/"  + appName + "/"+registrationId;
+			String url = communicatorURL + "unregister/user/"  + appName ;
 			
 			
 			ObjectMapper mapper = new ObjectMapper();
@@ -388,6 +427,7 @@ public class CommunicatorConnector {
 
 		//	String ids = mapper.writeValueAsString(userAccount);
 		Map<String, String> map = new TreeMap<String, String>();
+		//map.put(REGISTRATIONID_HEADER, registrationId);
 			
 			
 			//String userAccountAsString = mapper.writeValueAsString(userAccount);
@@ -414,10 +454,10 @@ public class CommunicatorConnector {
 	 * @throws CommunicatorConnectorException 
 	 * @throws CommunicatorConnectorException
 	 */
-	public String registerApp(String authToken,String senderId) throws CommunicatorConnectorException  {
+	public String registerApp(String authToken,String apikey) throws CommunicatorConnectorException  {
 		
 		try {
-			String url = communicatorURL + "register/app/"  + appName + "/"+senderId;
+			String url = communicatorURL + "register/app/"  + appName + "/"+apikey;
 		
 			
 			ObjectMapper mapper = new ObjectMapper();
