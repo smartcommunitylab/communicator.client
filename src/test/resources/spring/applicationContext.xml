@@ -33,7 +33,8 @@
 		<constructor-arg value="https://vas-dev.smartcampuslab.it/"/>
 		 -->
 		 
-		 <constructor-arg value="http://localhost:8080/"/> 
+		 <constructor-arg value="http://localhost:8081/communicatorservice"/> 
+		  <constructor-arg value="test"/> 
 	</bean>
 
 </beans>

@@ -18,7 +18,7 @@ import eu.trentorise.smartcampus.communicator.model.Notification;
 @ContextConfiguration("/spring/applicationContext.xml")
 public class TestClient {
 
-	private static final String AUTH_TOKEN = "";
+	private static final String AUTH_TOKEN = "aee58a92-d42d-42e8-b55e-12e4289586fc";
 	@Autowired
 	private CommunicatorConnector communicatorConnector;
 
@@ -36,9 +36,15 @@ public class TestClient {
 		notification.setTitle("Test notification");
 		notification.setUser("39");
 		
-		communicatorConnector.sendUserNotification(notification, users, AUTH_TOKEN);
-		
 		communicatorConnector.sendAppNotification(notification, "test_app", users, AUTH_TOKEN);
+	}
+	
+	@Test
+	public void testRegister() throws Exception {
+		
+		communicatorConnector.registerApp(AUTH_TOKEN, "apikeytest","testsender");
+		
+		communicatorConnector.registerUser(AUTH_TOKEN, "prova1");
 	}
 	
 	@Test
@@ -49,8 +55,6 @@ public class TestClient {
 			notification.setTitle("Test notification");
 			notification.setUser("39");
 			notification.setTimestamp(System.currentTimeMillis());
-			communicatorConnector.createNotification(notification, AUTH_TOKEN);
-			communicatorConnector.createNotification(notification, AUTH_TOKEN);
 
 			// get all notifications
 			List<Notification> results = communicatorConnector.getNotifications(0L, 0, -1, AUTH_TOKEN);

@@ -30,6 +30,10 @@ public class CommunicatorConnector {
 
 	private static final String NOTIFICATION = "eu.trentorise.smartcampus.communicator.model.Notification/";
 
+	private static final String APIKEY_HEADER = "APIKEYHEADER";
+
+	private static final String SENDERID_HEADER = "SENDERIDHEADER";
+
 	private String communicatorURL;
 
 	private String appName;
@@ -329,7 +333,7 @@ public class CommunicatorConnector {
 			
 			//String userAccountAsString = mapper.writeValueAsString(userAccount);
 			
-			String resp=HTTPConnector.doPostWithReturn(HttpMethod.POST, url, map, null,
+			String resp=HTTPConnector.doPostWithReturnWithHeader(HttpMethod.POST, url, map, null,
 					"application/json", "application/json", authToken,"UTF-8");
 		
 			
@@ -390,10 +394,10 @@ public class CommunicatorConnector {
 	 * @throws CommunicatorConnectorException 
 	 * @throws CommunicatorConnectorException
 	 */
-	public String registerApp(String authToken,String apikey) throws CommunicatorConnectorException  {
+	public String registerApp(String authToken,String apikey,String senderid) throws CommunicatorConnectorException  {
 		
 		try {
-			String url = communicatorURL + "register/app/"  + appName + "/"+apikey;
+			String url = communicatorURL + "register/app/"  + appName ;
 		
 			
 			ObjectMapper mapper = new ObjectMapper();
@@ -402,10 +406,12 @@ public class CommunicatorConnector {
 		//	String ids = mapper.writeValueAsString(userAccount);
 		Map<String, String> map = new TreeMap<String, String>();
 			//map.put("users", ids);
+		map.put(APIKEY_HEADER, apikey);
+		map.put(SENDERID_HEADER, senderid);
 			
 			//String userAccountAsString = mapper.writeValueAsString(userAccount);
 			
-			String resp=HTTPConnector.doPostWithReturn(HttpMethod.POST, url, map, null,
+			String resp=HTTPConnector.doPostWithReturnWithHeader(HttpMethod.POST, url, map, null,
 					"application/json", "application/json", authToken,"UTF-8");
 		
 			

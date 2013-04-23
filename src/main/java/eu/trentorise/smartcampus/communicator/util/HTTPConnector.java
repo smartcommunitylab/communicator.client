@@ -180,5 +180,67 @@ public class HTTPConnector {
 
 	}	
 	
+	public static String doPostWithReturnWithHeader(HttpMethod method, String address, Map<String, String> req, String content, String accept, String contentType, String token, String encoding) throws Exception {
+
+		StringBuffer response = new StringBuffer();
+
+		
+		URL url = new URL(address );
+
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod(method.toString());
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+		String encodedReq = null;
+		if (req != null && !req.keySet().isEmpty()) {
+			encodedReq = "";
+			for (String key : req.keySet()) {
+				
+				conn.setRequestProperty(key, req.get(key));
+			}
+			
+		}
+
+		
+
+		if (accept != null) {
+			conn.setRequestProperty("Accept", accept);
+		}
+		if (contentType != null) {
+			conn.setRequestProperty("Content-Type", contentType);
+		}
+		conn.setRequestProperty("AUTH_TOKEN", token);
+
+		if (content != null) {
+			OutputStream out = conn.getOutputStream();
+			Writer writer = new OutputStreamWriter(out, "UTF-8");
+
+			writer.write(content);
+			writer.close();
+			out.close();
+		}
+
+		if (conn.getResponseCode() < 200 || conn.getResponseCode() > 299) {
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		}
+		
+		BufferedReader br;
+		if (encoding != null) {
+			br = new BufferedReader(new InputStreamReader((conn.getInputStream()), encoding));
+		} else {
+			br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+		}
+
+		String output = null;
+		while ((output = br.readLine()) != null) {
+			response.append(output);
+		}
+
+		conn.disconnect();
+
+		return response.toString();		
+
+	}	
+	
 
 }
