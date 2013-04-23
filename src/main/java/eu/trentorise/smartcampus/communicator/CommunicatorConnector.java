@@ -32,9 +32,6 @@ public class CommunicatorConnector {
 
 	private String communicatorURL;
 
-	private static final String COMMUNICATORSERVICE = "communicator/";
-	
-
 	private String appName;
 
 
@@ -50,7 +47,6 @@ public class CommunicatorConnector {
 		this.appName = appName;
 		communicatorURL = serverURL;
 		communicatorURL += (serverURL.endsWith("/")) ? "" : "/";
-		communicatorURL += COMMUNICATORSERVICE;
 	}
 
 	/**
@@ -125,33 +121,6 @@ public class CommunicatorConnector {
 	}
 
 	/**
-	 * Create a notification
-	 * 
-	 * @param notification
-	 *            a notification
-	 * @param token
-	 *            an authorization token
-	 * @throws CommunicatorConnectorException
-	 */
-	public void createNotification(Notification notification, String token)
-			throws CommunicatorConnectorException {
-		try {
-			String url = communicatorURL + NOTIFICATION;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			String not = mapper.writeValueAsString(notification);
-
-			// HTTPConnector.doPostWithReturn(HttpMethod.POST, url, null, not,
-			// "application/json", "application/json", token, "UTF-8");
-			HTTPConnector.doPost(HttpMethod.POST, url, null, not,
-					"application/json", "application/json", token);
-		} catch (Exception e) {
-			throw new CommunicatorConnectorException(e);
-		}
-	}
-
-	/**
 	 * Update a notification (only starred and labelIds values are currently
 	 * updated)
 	 * 
@@ -197,39 +166,6 @@ public class CommunicatorConnector {
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 			HTTPConnector.doPost(HttpMethod.DELETE, url, null, null,
-					"application/json", "application/json", token);
-		} catch (Exception e) {
-			throw new CommunicatorConnectorException(e);
-		}
-	}
-
-	/**
-	 * Send a notification as a user
-	 * 
-	 * @param notification
-	 *            a notification
-	 * @param users
-	 *            a list of user Ids
-	 * @param token
-	 *            an authorization token
-	 * @throws CommunicatorConnectorException
-	 */
-	public void sendUserNotification(Notification notification,
-			List<String> users, String token)
-			throws CommunicatorConnectorException {
-		try {
-			String url = communicatorURL + "send/user";
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			String ids = mapper.writeValueAsString(users);
-			Map<String, String> map = new TreeMap<String, String>();
-			map.put("users", ids);
-
-			String not = mapper.writeValueAsString(notification);
-			// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
-			// "application/json", "application/json", token, "UTF-8");
-			HTTPConnector.doPost(HttpMethod.POST, url, map, not,
 					"application/json", "application/json", token);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
