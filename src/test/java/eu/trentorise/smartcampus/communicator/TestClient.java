@@ -40,11 +40,26 @@ public class TestClient {
 	}
 	
 	@Test
-	public void testRegister() throws Exception {
+	public void testRegisterApp() throws Exception {
 		
-		communicatorConnector.registerApp(AUTH_TOKEN, "apikeytest","testsender");
+		communicatorConnector.registerApp(AUTH_TOKEN, "AIzaSyDfJLeK-_oXCS-PlMuwVmxmE2gcBtWe-_k","557126495282");
+		
+	
+	}
+	
+	@Test
+	public void testRegisterUser() throws Exception {
 		
 		communicatorConnector.registerUser(AUTH_TOKEN, "prova1");
+	
+	}
+	
+	@Test
+	public void testUnRegisterUser() throws Exception {
+		
+
+		
+		communicatorConnector.unregisterUser(AUTH_TOKEN);
 	}
 	
 	@Test

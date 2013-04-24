@@ -10,36 +10,32 @@ import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import eu.trentorise.smartcampus.communicator.model.AppAccount;
+import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.ListAppAccount;
 import eu.trentorise.smartcampus.communicator.model.ListUserAccount;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.UserAccount;
+import eu.trentorise.smartcampus.communicator.model.UserSignature;
 import eu.trentorise.smartcampus.communicator.util.HTTPConnector;
 import eu.trentorise.smartcampus.communicator.util.HttpMethod;
-
 
 /**
  * Class used to connect with the communicator service.
  * 
  */
 public class CommunicatorConnector {
-	
+
 	public static final String REGISTRATIONID_HEADER = "REGISTRATIONID";
-	
-	private static final Logger logger = Logger.getLogger(CommunicatorConnector.class);
+
+	private static final Logger logger = Logger
+			.getLogger(CommunicatorConnector.class);
 
 	private static final String NOTIFICATION = "eu.trentorise.smartcampus.communicator.model.Notification/";
-
-	private static final String APIKEY_HEADER = "APIKEYHEADER";
-
-	private static final String SENDERID_HEADER = "SENDERIDHEADER";
 
 	private String communicatorURL;
 
 	private String appName;
 
-
-	
 	/**
 	 * 
 	 * @param serverURL
@@ -82,6 +78,7 @@ public class CommunicatorConnector {
 			String resp = HTTPConnector.doGet(url, map, "application/json",
 					"application/json", token, "UTF-8");
 
+			@SuppressWarnings("rawtypes")
 			List list = mapper.readValue(resp, List.class);
 			List<Notification> result = new ArrayList<Notification>();
 			for (Object o : list) {
@@ -210,8 +207,8 @@ public class CommunicatorConnector {
 			throw new CommunicatorConnectorException(e);
 		}
 	}
-	
-	/**
+
+/**
  	 * retrieves all the user communicator accounts binded to the application name and to the authentication token
 	 * @param authToken the authentication token
 	 * @return list of {@link UserAccount)
@@ -219,19 +216,19 @@ public class CommunicatorConnector {
 	 */
 	public List<UserAccount> getUserAccounts(String authToken)
 			throws CommunicatorConnectorException {
-		
+
 		try {
-			
-			String url = communicatorURL + "/useraccount/"  + appName;
+
+			String url = communicatorURL + "/useraccount/" + appName;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			
-			
-			String resp=HTTPConnector.doGet(url, null, null, "application/json", authToken, "UTF-8");
-			List<UserAccount> result = mapper.readValue(resp, ListUserAccount.class).getUserAccounts();
+
+			String resp = HTTPConnector.doGet(url, null, null,
+					"application/json", authToken, "UTF-8");
+			List<UserAccount> result = mapper.readValue(resp,
+					ListUserAccount.class).getUserAccounts();
 			return result;
-			
-			
+
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
@@ -240,33 +237,31 @@ public class CommunicatorConnector {
 	}
 
 	/**
-	 * retrieves all the application communicator account binded to the application
-	 * name
+	 * retrieves all the application communicator account binded to the
+	 * application name
 	 * 
 	 * @return the list of {@link AppAccount}
 	 * @throws CommunicatorConnectorException
 	 */
-	public List<AppAccount> getAppAccounts() throws CommunicatorConnectorException {
+	public List<AppAccount> getAppAccounts()
+			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "/appaccount/"  + appName;
+			String url = communicatorURL + "/appaccount/" + appName;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			
-			
-			String resp=HTTPConnector.doGet(url, null, null, "application/json", null, "UTF-8");
-			List<AppAccount> result = mapper.readValue(resp, ListAppAccount.class).getAppAccounts();
+
+			String resp = HTTPConnector.doGet(url, null, null,
+					"application/json", null, "UTF-8");
+			List<AppAccount> result = mapper.readValue(resp,
+					ListAppAccount.class).getAppAccounts();
 			return result;
-			
-			
+
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
 		}
 	}
-	
-	
-	
-	
+
 	/**
 	 * stores an user communicator account
 	 * 
@@ -275,38 +270,38 @@ public class CommunicatorConnector {
 	 * @param userAccount
 	 *            userAccount to store
 	 * @return the {@link UserAccount} stored
-	 * @throws CommunicatorConnectorException 
+	 * @throws CommunicatorConnectorException
 	 * @throws CommunicatorConnectorException
 	 */
 	public UserAccount storeUserAccount(String authToken,
-			UserAccount userAccount) throws CommunicatorConnectorException  {
-		
+			UserAccount userAccount) throws CommunicatorConnectorException {
+
 		try {
-			String url = communicatorURL + "/useraccount/"  + appName;
-			
-			
+			String url = communicatorURL + "/useraccount/" + appName;
+
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 			String ids = mapper.writeValueAsString(userAccount);
 			Map<String, String> map = new TreeMap<String, String>();
 			map.put("users", ids);
-			
+
 			String userAccountAsString = mapper.writeValueAsString(userAccount);
-			
-			String resp=HTTPConnector.doPostWithReturn(HttpMethod.POST, url, map, userAccountAsString,
-					"application/json", "application/json", authToken,"UTF-8");
-			
+
+			String resp = HTTPConnector.doPostWithReturn(HttpMethod.POST, url,
+					map, userAccountAsString, "application/json",
+					"application/json", authToken, "UTF-8");
+
 			UserAccount result = mapper.readValue(resp, UserAccount.class);
 			return result;
-			
+
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
 		}
 
 	}
-	
+
 	/**
 	 * regiter an user pushservice
 	 * 
@@ -314,38 +309,42 @@ public class CommunicatorConnector {
 	 *            authentication token
 	 * @param registrationId
 	 *            user googleid to pushservice
-	 * @throws CommunicatorConnectorException 
+	 * @throws CommunicatorConnectorException
 	 * @throws CommunicatorConnectorException
 	 */
-	public String registerUser(String authToken,String registrationId) throws CommunicatorConnectorException  {
-		
+	public String registerUser(String authToken, String registrationId)
+			throws CommunicatorConnectorException {
+
 		try {
-			String url = communicatorURL + "register/user/"  + appName ;
-			
-			
+			String url = communicatorURL + "register/user";
+
+			UserSignature userSignature = new UserSignature();
+			userSignature.setAppName(appName);
+			userSignature.setRegistrationId(registrationId);
+
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-		//	String ids = mapper.writeValueAsString(userAccount);
-		Map<String, String> map = new TreeMap<String, String>();
-		map.put(REGISTRATIONID_HEADER, registrationId);
-			
-			
-			//String userAccountAsString = mapper.writeValueAsString(userAccount);
-			
-			String resp=HTTPConnector.doPostWithReturnWithHeader(HttpMethod.POST, url, map, null,
-					"application/json", "application/json", authToken,"UTF-8");
-		
-			
+			// String ids = mapper.writeValueAsString(userAccount);
+			Map<String, String> map = new TreeMap<String, String>();
+			// map.put(REGISTRATIONID_HEADER, registrationId);
+
+			String userSignatureAsString = mapper
+					.writeValueAsString(userSignature);
+
+			String resp = HTTPConnector.doPostWithReturn(HttpMethod.POST, url,
+					map, userSignatureAsString, "application/json",
+					"application/json", authToken, "UTF-8");
+
 			return resp;
-			
+
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
 		}
-		
+
 	}
-	
+
 	/**
 	 * stores an user pushservice
 	 * 
@@ -353,75 +352,73 @@ public class CommunicatorConnector {
 	 *            authentication token
 	 * @param registrationId
 	 *            user googleid to store
-	 * @throws CommunicatorConnectorException 
+	 * @throws CommunicatorConnectorException
 	 * @throws CommunicatorConnectorException
 	 */
-	public String unregisterUser(String authToken) throws CommunicatorConnectorException  {
-		
+	public String unregisterUser(String authToken)
+			throws CommunicatorConnectorException {
+
 		try {
-			String url = communicatorURL + "unregister/user/"  + appName ;
-			
-			
+			String url = communicatorURL + "unregister/user/" + appName;
+
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-		//	String ids = mapper.writeValueAsString(userAccount);
-		Map<String, String> map = new TreeMap<String, String>();
-		//map.put(REGISTRATIONID_HEADER, registrationId);
-			
-			
-			//String userAccountAsString = mapper.writeValueAsString(userAccount);
-			
-			String resp=HTTPConnector.doPostWithReturn(HttpMethod.POST, url, map, null,
-					"application/json", "application/json", authToken,"UTF-8");
-		
-			
+			String resp = HTTPConnector.doGet(url, null, "application/json",
+					"application/json", authToken, "UTF-8");
+
 			return resp;
-			
+
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
 		}
-		
+
 	}
-	
+
 	/**
 	 * stores an app communicator account
 	 * 
 	 * @param authToken
 	 *            authentication token
 	 * 
-	 * @throws CommunicatorConnectorException 
+	 * @throws CommunicatorConnectorException
 	 * @throws CommunicatorConnectorException
 	 */
-	public String registerApp(String authToken,String apikey,String senderid) throws CommunicatorConnectorException  {
-		
+	public String registerApp(String authToken, String apikey, String senderid)
+			throws CommunicatorConnectorException {
+
 		try {
-			String url = communicatorURL + "register/app/"  + appName ;
-		
-			
+			String url = communicatorURL + "register/app";
+
+			AppSignature appSignature = new AppSignature();
+			appSignature.setApiKey(apikey);
+			appSignature.setAppName(appName);
+			appSignature.setSenderId(senderid);
+
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-		//	String ids = mapper.writeValueAsString(userAccount);
-		Map<String, String> map = new TreeMap<String, String>();
-			//map.put("users", ids);
-		map.put(APIKEY_HEADER, apikey);
-		map.put(SENDERID_HEADER, senderid);
-			
-			//String userAccountAsString = mapper.writeValueAsString(userAccount);
-			
-			String resp=HTTPConnector.doPostWithReturnWithHeader(HttpMethod.POST, url, map, null,
-					"application/json", "application/json", authToken,"UTF-8");
-		
-			
+			// String ids = mapper.writeValueAsString(userAccount);
+			Map<String, String> map = new TreeMap<String, String>();
+			// map.put("users", ids);
+			// map.put(APIKEY_HEADER, apikey);
+			// map.put(SENDERID_HEADER, senderid);
+
+			String appSignatureAsString = mapper
+					.writeValueAsString(appSignature);
+
+			String resp = HTTPConnector.doPostWithReturn(HttpMethod.POST, url,
+					map, appSignatureAsString, "application/json",
+					"application/json", authToken, "UTF-8");
+
 			return resp;
-			
+
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
 		}
-		
+
 	}
 
 }

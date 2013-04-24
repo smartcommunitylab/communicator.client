@@ -80,8 +80,6 @@ public class HTTPConnector {
 
 	public static void doPost(HttpMethod method, String address, Map<String, String> req, String content, String accept, String contentType, String token) throws Exception {
 
-		StringBuffer response = new StringBuffer();
-
 		String encodedReq = null;
 		if (req != null && !req.keySet().isEmpty()) {
 			encodedReq = "";
@@ -191,9 +189,7 @@ public class HTTPConnector {
 		conn.setRequestMethod(method.toString());
 		conn.setDoOutput(true);
 		conn.setDoInput(true);
-		String encodedReq = null;
 		if (req != null && !req.keySet().isEmpty()) {
-			encodedReq = "";
 			for (String key : req.keySet()) {
 				
 				conn.setRequestProperty(key, req.get(key));
