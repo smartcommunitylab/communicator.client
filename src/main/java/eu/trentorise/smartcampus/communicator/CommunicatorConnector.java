@@ -204,6 +204,7 @@ public class CommunicatorConnector {
 			HTTPConnector.doPost(HttpMethod.POST, url, map, not,
 					"application/json", "application/json", token);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CommunicatorConnectorException(e);
 		}
 	}
@@ -413,6 +414,38 @@ public class CommunicatorConnector {
 					"application/json", authToken, "UTF-8");
 
 			return resp;
+
+		} catch (Exception e) {
+			logger.error("Exception getting user accounts", e);
+			throw new CommunicatorConnectorException(e);
+		}
+
+	}
+	
+	/**
+	 * get app push configuration
+	 * 
+	 * @param authToken
+	 *            authentication token
+	 * 
+	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException
+	 */
+	public Map<String, String> getAppConfig(String authToken)
+			throws CommunicatorConnectorException {
+
+		try {
+			String url = communicatorURL + "/configuration/"+appName;
+		
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+			String resp = HTTPConnector.doGet(url, null, "application/json",
+					"application/json", authToken, "UTF-8");
+
+			Map<String, String> result = mapper.readValue(resp, Map.class);
+
+			return result;
 
 		} catch (Exception e) {
 			logger.error("Exception getting user accounts", e);
