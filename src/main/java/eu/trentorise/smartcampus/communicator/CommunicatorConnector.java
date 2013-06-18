@@ -435,7 +435,7 @@ public class CommunicatorConnector {
 			throws CommunicatorConnectorException {
 
 		try {
-			String url = communicatorURL + "/configuration/"+appName;
+			String url = communicatorURL + "configuration/"+appName;
 		
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
