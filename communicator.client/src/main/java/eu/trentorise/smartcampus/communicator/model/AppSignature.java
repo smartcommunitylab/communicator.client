@@ -4,18 +4,15 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 @XmlRootElement(name = "appsignature")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class AppSignature {
-	
-	private String appId;
-	
-	private String senderId;
-	
-	private String apiKey;
 
-	
+	private String appId;
+
+	private String senderId;
+
+	private String apiKey;
 
 	public String getSenderId() {
 		return senderId;

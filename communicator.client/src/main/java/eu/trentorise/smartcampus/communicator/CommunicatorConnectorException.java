@@ -2,7 +2,7 @@ package eu.trentorise.smartcampus.communicator;
 
 /**
  * Exception thrown by {@link CommunicatorConnector}
- *
+ * 
  */
 public class CommunicatorConnectorException extends Exception {
 

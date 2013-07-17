@@ -27,7 +27,7 @@ public class Notification {
 	private String id; // id
 	private long updateTime = -1L;
 	private long version;
-	
+
 	private String title; // title
 	private String description; // description
 	private String type; // source of the notification
@@ -40,7 +40,7 @@ public class Notification {
 	private List<EntityObject> entities; // list of entities
 
 	private NotificationAuthor author; // notification author
-	
+
 	private boolean readed; // readed flag
 
 	public Notification() {
@@ -138,11 +138,13 @@ public class Notification {
 	public void setChannelIds(List<String> channelIds) {
 		this.channelIds = channelIds;
 	}
+
 	public void addChannelId(String channelId) {
-		if (channelIds == null) channelIds = new ArrayList<String>();
+		if (channelIds == null)
+			channelIds = new ArrayList<String>();
 		channelIds.add(channelId);
 	}
-	
+
 	public boolean isReaded() {
 		return readed;
 	}

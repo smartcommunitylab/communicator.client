@@ -27,7 +27,9 @@ import java.util.Map;
 
 public class HTTPConnector {
 
-	public static String doGet(String address, Map<String, Object> req, String accept, String contentType, String token, String encoding) throws Exception {
+	public static String doGet(String address, Map<String, Object> req,
+			String accept, String contentType, String token, String encoding)
+			throws Exception {
 
 		StringBuffer response = new StringBuffer();
 
@@ -36,7 +38,10 @@ public class HTTPConnector {
 			encodedReq = "";
 			for (String key : req.keySet()) {
 				if (req.get(key) != null) {
-					encodedReq += URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(req.get(key).toString(), "UTF-8") + "&";
+					encodedReq += URLEncoder.encode(key, "UTF-8")
+							+ "="
+							+ URLEncoder.encode(req.get(key).toString(),
+									"UTF-8") + "&";
 				}
 			}
 			if (encodedReq.length() > 0) {
@@ -44,7 +49,8 @@ public class HTTPConnector {
 			}
 		}
 
-		URL url = new URL(address + ((encodedReq != null) ? ("?" + encodedReq) : ""));
+		URL url = new URL(address
+				+ ((encodedReq != null) ? ("?" + encodedReq) : ""));
 
 		System.out.println(url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -59,14 +65,17 @@ public class HTTPConnector {
 		conn.setRequestProperty("Authorization", token);
 
 		if (conn.getResponseCode() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ conn.getResponseCode());
 		}
 
 		BufferedReader br;
 		if (encoding != null) {
-			br = new BufferedReader(new InputStreamReader((conn.getInputStream()), encoding));
+			br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream()), encoding));
 		} else {
-			br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
 		}
 
 		String output = null;
@@ -79,18 +88,22 @@ public class HTTPConnector {
 		return response.toString();
 	}
 
-	public static void doPost(HttpMethod method, String address, Map<String, String> req, String content, String accept, String contentType, String token) throws Exception {
+	public static void doPost(HttpMethod method, String address,
+			Map<String, String> req, String content, String accept,
+			String contentType, String token) throws Exception {
 
 		String encodedReq = null;
 		if (req != null && !req.keySet().isEmpty()) {
 			encodedReq = "";
 			for (String key : req.keySet()) {
-				encodedReq += URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(req.get(key), "UTF-8") + "&";
+				encodedReq += URLEncoder.encode(key, "UTF-8") + "="
+						+ URLEncoder.encode(req.get(key), "UTF-8") + "&";
 			}
 			encodedReq = encodedReq.substring(0, encodedReq.length() - 1);
 		}
 
-		URL url = new URL(address + ((encodedReq != null) ? ("?" + encodedReq) : ""));
+		URL url = new URL(address
+				+ ((encodedReq != null) ? ("?" + encodedReq) : ""));
 		System.out.println(url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod(method.toString());
@@ -115,12 +128,15 @@ public class HTTPConnector {
 		}
 
 		if (conn.getResponseCode() < 200 || conn.getResponseCode() > 299) {
-			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ conn.getResponseCode());
 		}
 
 	}
-	
-	public static String doPostWithReturn(HttpMethod method, String address, Map<String, String> req, String content, String accept, String contentType, String token, String encoding) throws Exception {
+
+	public static String doPostWithReturn(HttpMethod method, String address,
+			Map<String, String> req, String content, String accept,
+			String contentType, String token, String encoding) throws Exception {
 
 		StringBuffer response = new StringBuffer();
 
@@ -128,12 +144,14 @@ public class HTTPConnector {
 		if (req != null && !req.keySet().isEmpty()) {
 			encodedReq = "";
 			for (String key : req.keySet()) {
-				encodedReq += URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(req.get(key), "UTF-8") + "&";
+				encodedReq += URLEncoder.encode(key, "UTF-8") + "="
+						+ URLEncoder.encode(req.get(key), "UTF-8") + "&";
 			}
 			encodedReq = encodedReq.substring(0, encodedReq.length() - 1);
 		}
 
-		URL url = new URL(address + ((encodedReq != null) ? ("?" + encodedReq) : ""));
+		URL url = new URL(address
+				+ ((encodedReq != null) ? ("?" + encodedReq) : ""));
 		System.out.println(url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod(method.toString());
@@ -158,14 +176,17 @@ public class HTTPConnector {
 		}
 
 		if (conn.getResponseCode() < 200 || conn.getResponseCode() > 299) {
-			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ conn.getResponseCode());
 		}
-		
+
 		BufferedReader br;
 		if (encoding != null) {
-			br = new BufferedReader(new InputStreamReader((conn.getInputStream()), encoding));
+			br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream()), encoding));
 		} else {
-			br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
 		}
 
 		String output = null;
@@ -175,16 +196,18 @@ public class HTTPConnector {
 
 		conn.disconnect();
 
-		return response.toString();		
+		return response.toString();
 
-	}	
-	
-	public static String doPostWithReturnWithHeader(HttpMethod method, String address, Map<String, String> req, String content, String accept, String contentType, String token, String encoding) throws Exception {
+	}
+
+	public static String doPostWithReturnWithHeader(HttpMethod method,
+			String address, Map<String, String> req, String content,
+			String accept, String contentType, String token, String encoding)
+			throws Exception {
 
 		StringBuffer response = new StringBuffer();
 
-		
-		URL url = new URL(address );
+		URL url = new URL(address);
 		System.out.println(url);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod(method.toString());
@@ -192,13 +215,11 @@ public class HTTPConnector {
 		conn.setDoInput(true);
 		if (req != null && !req.keySet().isEmpty()) {
 			for (String key : req.keySet()) {
-				
+
 				conn.setRequestProperty(key, req.get(key));
 			}
-			
-		}
 
-		
+		}
 
 		if (accept != null) {
 			conn.setRequestProperty("Accept", accept);
@@ -218,14 +239,17 @@ public class HTTPConnector {
 		}
 
 		if (conn.getResponseCode() < 200 || conn.getResponseCode() > 299) {
-			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ conn.getResponseCode());
 		}
-		
+
 		BufferedReader br;
 		if (encoding != null) {
-			br = new BufferedReader(new InputStreamReader((conn.getInputStream()), encoding));
+			br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream()), encoding));
 		} else {
-			br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			br = new BufferedReader(new InputStreamReader(
+					(conn.getInputStream())));
 		}
 
 		String output = null;
@@ -235,9 +259,8 @@ public class HTTPConnector {
 
 		conn.disconnect();
 
-		return response.toString();		
+		return response.toString();
 
-	}	
-	
+	}
 
 }

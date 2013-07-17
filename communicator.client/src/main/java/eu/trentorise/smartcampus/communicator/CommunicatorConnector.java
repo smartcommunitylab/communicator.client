@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -23,14 +22,13 @@ public class CommunicatorConnector {
 
 	public static final String REGISTRATIONID_HEADER = "REGISTRATIONID";
 
-	private static final Logger logger = Logger
-			.getLogger(CommunicatorConnector.class);
-
+	
 	private static final String NOTIFICATION = "notification";
 	private static final String BYAPP = "app/";
 	private static final String BYUSER = "user/";
 
 	private String communicatorURL;
+	private String appId;
 
 	/**
 	 * 
@@ -39,9 +37,10 @@ public class CommunicatorConnector {
 	 * @param appName
 	 *            name of app
 	 */
-	public CommunicatorConnector(String serverURL) {
+	public CommunicatorConnector(String serverURL, String appId) {
 		communicatorURL = serverURL;
 		communicatorURL += (serverURL.endsWith("/")) ? "" : "/";
+		this.setAppId(appId);
 	}
 
 	/**
@@ -173,14 +172,12 @@ public class CommunicatorConnector {
 		}
 	}
 
-	
-
 	// "/{capp}/notification")
 	public List<Notification> getNotificationsByApp(Long since,
 			Integer position, Integer count, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYAPP + NOTIFICATION;
+			String url = communicatorURL + BYAPP + appId + "/" + NOTIFICATION;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -211,7 +208,8 @@ public class CommunicatorConnector {
 	public Notification getNotificationByApp(String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYAPP + NOTIFICATION + id;
+			String url = communicatorURL + BYAPP + appId + "/" + NOTIFICATION
+					+ "/" + id;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -242,7 +240,8 @@ public class CommunicatorConnector {
 	public void updateByApp(Notification notification, String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYAPP + NOTIFICATION + id;
+			String url = communicatorURL + BYAPP + appId + "/" + NOTIFICATION
+					+ "/" + id;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -269,7 +268,8 @@ public class CommunicatorConnector {
 	public void deleteByApp(String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYAPP + NOTIFICATION + id;
+			String url = communicatorURL + BYAPP + appId + "/" + NOTIFICATION
+					+ "/" + id;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -316,7 +316,7 @@ public class CommunicatorConnector {
 	public Notification getNotificationByUser(String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYUSER + NOTIFICATION + id;
+			String url = communicatorURL + BYUSER + NOTIFICATION + "/" + id;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -347,7 +347,7 @@ public class CommunicatorConnector {
 	public void updateByUser(Notification notification, String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYUSER + NOTIFICATION + id;
+			String url = communicatorURL + BYUSER + NOTIFICATION + "/" + id;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -374,7 +374,7 @@ public class CommunicatorConnector {
 	public void deleteByUser(String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + BYUSER + NOTIFICATION + id;
+			String url = communicatorURL + BYUSER + NOTIFICATION + "/" + id;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -386,16 +386,16 @@ public class CommunicatorConnector {
 	}
 
 	// "/register/app/{appid}")
-	public boolean registerApp(AppSignature signature, String appid, String token)
-			throws CommunicatorConnectorException {
+	public boolean registerApp(AppSignature signature, String appid,
+			String token) throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "register/"+ BYAPP + appid;
+			String url = communicatorURL + "register/" + BYAPP + appid;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-			//String ids = mapper.writeValueAsString(users);
-			//Map<String, String> map = new TreeMap<String, String>();
-		//	map.put("users", ids);
+			// String ids = mapper.writeValueAsString(users);
+			// Map<String, String> map = new TreeMap<String, String>();
+			// map.put("users", ids);
 
 			String not = mapper.writeValueAsString(signature);
 			// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
@@ -409,18 +409,17 @@ public class CommunicatorConnector {
 		}
 	}
 
-
 	// "/register/user/{appid}/user")
-	public boolean registerUserToPush(String appid, UserSignature signature, String token)
-			throws CommunicatorConnectorException {
+	public boolean registerUserToPush(String appid, UserSignature signature,
+			String token) throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "register/"+ BYUSER + appid;
+			String url = communicatorURL + "register/" + BYUSER + appid;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-			//String ids = mapper.writeValueAsString(users);
-			//Map<String, String> map = new TreeMap<String, String>();
-		//	map.put("users", ids);
+			// String ids = mapper.writeValueAsString(users);
+			// Map<String, String> map = new TreeMap<String, String>();
+			// map.put("users", ids);
 
 			String not = mapper.writeValueAsString(signature);
 			// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
@@ -435,35 +434,31 @@ public class CommunicatorConnector {
 	}
 
 	// /unregister/user/{appId}/{userid}")
-	public boolean unregisterUserToPush(String appid, String userid,String token)throws CommunicatorConnectorException {
+	public void unregisterUserToPush(String userid, String token)
+			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "unregister" + BYUSER + appid+"/"+userid;
+			String url = communicatorURL + "unregister/" + BYUSER + appId;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			String resp = HTTPConnector.doGet(url, null, "application/json",
-					"application/json", token, "UTF-8");
-			@SuppressWarnings("unchecked")
-			Boolean result = mapper.readValue(resp, Boolean.class);
-			
-			return result;
-			
+
+			HTTPConnector.doPost(HttpMethod.DELETE, url, null, null,
+					"application/json", "application/json", token);
+
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
 	}
+
 	// /unregister/app/{appId}")
-	public boolean unregisterAppToPush(String appId,String token)throws CommunicatorConnectorException {
+	public void unregisterAppToPush(String token)
+			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "unregister" + BYAPP + appId;
+			String url = communicatorURL + "unregister/" + BYAPP + appId;
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			String resp = HTTPConnector.doGet(url, null, "application/json",
-					"application/json", token, "UTF-8");
-			@SuppressWarnings("unchecked")
-			Boolean result = mapper.readValue(resp, Boolean.class);
-			
-			return result;
-			
+			HTTPConnector.doPost(HttpMethod.DELETE, url, null, null,
+					"application/json", "application/json", token);
+
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -508,30 +503,31 @@ public class CommunicatorConnector {
 
 	// /send/user")
 	public void sendUserNotification(List<String> users,
-			Notification notification, String token) 
-					throws CommunicatorConnectorException {
-				try {
-					String url = communicatorURL + "send/user";
-					ObjectMapper mapper = new ObjectMapper();
-					mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			Notification notification, String token)
+			throws CommunicatorConnectorException {
+		try {
+			String url = communicatorURL + "send/user";
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-					String ids = mapper.writeValueAsString(users);
-					Map<String, String> map = new TreeMap<String, String>();
-					map.put("users", ids);
+			String ids = mapper.writeValueAsString(users);
+			Map<String, String> map = new TreeMap<String, String>();
+			map.put("users", ids);
 
-					String not = mapper.writeValueAsString(notification);
-					// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
-					// "application/json", "application/json", token, "UTF-8");
-					HTTPConnector.doPost(HttpMethod.POST, url, map, not,
-							"application/json", "application/json", token);
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new CommunicatorConnectorException(e);
-				}
-			}
+			String not = mapper.writeValueAsString(notification);
+			// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
+			// "application/json", "application/json", token, "UTF-8");
+			HTTPConnector.doPost(HttpMethod.POST, url, map, not,
+					"application/json", "application/json", token);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new CommunicatorConnectorException(e);
+		}
+	}
 
 	// /configuration/app/{appid}")
-	public Map<String, String> requestAppConfigurationToPush(String appid ,String token)throws CommunicatorConnectorException {
+	public Map<String, String> requestAppConfigurationToPush(String appid,
+			String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + "configuration/" + BYAPP + appid;
 			ObjectMapper mapper = new ObjectMapper();
@@ -540,16 +536,17 @@ public class CommunicatorConnector {
 					"application/json", token, "UTF-8");
 			@SuppressWarnings("unchecked")
 			Map<String, String> result = mapper.readValue(resp, Map.class);
-			
+
 			return result;
-			
+
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
 	}
 
 	// /configuration/user/{appid}")
-	public Map<String, String> requestUserConfigurationToPush(String appid,String token)throws CommunicatorConnectorException {
+	public Map<String, String> requestUserConfigurationToPush(String appid,
+			String token) throws CommunicatorConnectorException {
 		try {
 			String url = communicatorURL + "configuration/" + BYUSER + appid;
 			ObjectMapper mapper = new ObjectMapper();
@@ -558,12 +555,20 @@ public class CommunicatorConnector {
 					"application/json", token, "UTF-8");
 			@SuppressWarnings("unchecked")
 			Map<String, String> result = mapper.readValue(resp, Map.class);
-			
+
 			return result;
-			
+
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
 	}
 
 }
