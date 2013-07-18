@@ -22,7 +22,7 @@ import eu.trentorise.smartcampus.communicator.model.NotificationAuthor;
 public class TestClientApp {
 
 	private static final String CLIENTNAME = "clientname";
-	private static final String AUTH_TOKEN = "Bearer fd7129f7-7a44-49d0-8fbf-3d906ae6004c";
+	private static final String AUTH_TOKEN = "Bearer dc8f4ef0-c810-4f56-a9b0-2627fe77b040";
 	@Autowired
 	private CommunicatorConnector communicatorConnector;
 
@@ -57,9 +57,9 @@ public class TestClientApp {
 	@Test
 	public void registerApp() throws CommunicatorConnectorException {
 		AppSignature signature = new AppSignature();
-		signature.setApiKey("prova");
+		signature.setApiKey("AIzaSyBA0dQYoF2YQKwm6h5dH4q7h5DTt7LmJrw");
 		signature.setAppId(CLIENTNAME);
-		signature.setSenderId("vaivai");
+		signature.setSenderId("557126495282");
 		Assert.assertTrue(communicatorConnector.registerApp(signature,
 				CLIENTNAME, AUTH_TOKEN));
 
