@@ -15,54 +15,49 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.communicator.model;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NotificationAuthor implements Serializable {
-	private static final long serialVersionUID = -1045073082737340872L;
+/**
+ * Class representing a notification
+ */
+public class Notifications {
 
-	private String appId;
-	private String userId;
+	/**
+	 * A list of basic profiles
+	 */
+	private List<Notification> notifications;
 
-	public String getUserId() {
-		return userId;
+	public List<Notification> getNotifications() {
+		return notifications;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
 	}
 
-	public String getAppId() {
-		return appId;
-	}
-
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
-	
 	/**
 	 * @param json
 	 * @return
-	 * @throws JSONException 
 	 */
-	public static NotificationAuthor valueOf(String json)  {
+	public static Notifications valueOf(String json) {
 		try {
 			JSONObject o = new JSONObject(json);
-			NotificationAuthor notificationAuthor = new NotificationAuthor();
-			notificationAuthor.setAppId(o.getString("appId"));
-			notificationAuthor.setUserId(o.getString("userId"));
-			return notificationAuthor;
+			Notifications profile = new Notifications();
+			profile.setNotifications(new ArrayList<Notification>());
+			JSONArray arr = o.getJSONArray("profiles");
+			if (arr != null)
+				for (int i = 0; i < arr.length(); i++) {
+					profile.getNotifications().add(Notification.valueOf(arr.getJSONObject(i).toString()));
+				}
+			return profile;
 		} catch (JSONException e) {
 			return null;
 		}
 	}
-
-	@Override
-	public String toString() {
-		return "NotificationAuthor [ appId=" + appId + ", userId=" + userId + "]";
-	}
 	
-
 }

@@ -23,9 +23,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import eu.trentorise.smartcampus.network.JsonHelper;
 
 /**
  * <i>Configuration</i> is the representation of a configuration in a user
@@ -38,10 +39,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration {
 
-	private static ObjectMapper mapper = new ObjectMapper();
-	/**
-	 * value of configuration
-	 */
 	private CloudToPushType key;
 
 	private String listValue;
@@ -50,8 +47,7 @@ public class Configuration {
 
 	}
 
-	public Configuration(CloudToPushType key, Map<String, String> listValue)
-			throws JsonGenerationException, JsonMappingException, IOException {
+	public Configuration(CloudToPushType key, Map<String, Object> listValue) throws IOException, JSONException {
 		this.setKey(key);
 		this.setListValue(listValue);
 	}
@@ -64,18 +60,43 @@ public class Configuration {
 		this.key = key;
 	}
 
-	public void setListValue(Map<String, String> listValue)
-			throws JsonGenerationException, JsonMappingException, IOException {
-		this.listValue = mapper.writeValueAsString(listValue);
+	public void setListValue(Map<String, Object> listValue) throws IOException, JSONException {
+		this.listValue = (String) JsonHelper.toJSON(listValue);
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<String, String> getListValue() {
+	public Map<String, Object> getListValue() {
 		try {
-			return mapper.readValue(listValue, Map.class);
+			return (Map<String, Object>) JsonHelper.toJSON(listValue);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * @param json
+	 * @return
+	 * @throws IOException 
+	 * @throws JSONException
+	 */
+	public static Configuration valueOf(String json) throws IOException {
+		try {
+			JSONObject o = new JSONObject(json);
+			Configuration configuration = new Configuration();
+			configuration.setKey(CloudToPushType.valueOf(o
+					.getString("cloudpushtype")));
+			configuration.setListValue(JsonHelper.toMap(o
+					.getJSONObject("listValue")));
+			return configuration;
+		} catch (JSONException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Configuration [key=" + key + ", listValue=" + listValue + "]";
 	}
 
 }

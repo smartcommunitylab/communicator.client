@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import eu.trentorise.smartcampus.network.JsonHelper;
+
 /**
  * Class representing a notification
  */
@@ -176,5 +181,48 @@ public class Notification {
 	public void setAuthor(NotificationAuthor author) {
 		this.author = author;
 	}
+	
+	/**
+	 * @param json
+	 * @return
+	 * @throws JSONException 
+	 */
+	@SuppressWarnings("unchecked")
+	public static Notification valueOf(String json)  {
+		try {
+			JSONObject o = new JSONObject(json);
+			Notification notification = new Notification();
+			notification.setAuthor(NotificationAuthor.valueOf(o.getString("author")));
+			notification.setChannelIds(JsonHelper.toList(o.getJSONArray("channelIds")));
+			notification.setContent(JsonHelper.toMap(o.getJSONObject("content")));
+			notification.setDescription(o.getString("description"));
+			notification.setEntities(JsonHelper.toList(o.getJSONArray("entities")));
+			notification.setId(o.getString("id"));
+			notification.setLabelIds(JsonHelper.toList(o.getJSONArray("labelIds")));
+			notification.setReaded(o.getBoolean("readed"));
+			notification.setStarred(o.getBoolean("starred"));
+			notification.setTimestamp(o.getLong("timestamp"));
+			notification.setTitle(o.getString("title"));
+			notification.setType(o.getString("type"));
+			notification.setUpdateTime(o.getLong("updateTime"));
+			notification.setUser(o.getString("user"));
+			notification.setVersion(o.getLong("version"));
+			
+			
+			return notification;
+		} catch (JSONException e) {
+			return null;
+		}
+	}
+
+
+	@Override
+	public String toString() {
+		return "Notification [author="+ author + ",channelIds=" +channelIds+",content=" +content+
+				",description="+description +",entities="+entities +",id="+id +
+				",labelIds="+labelIds +",readed="+readed +",starred="+starred +",timestamp="+timestamp +
+				",title="+title +",type=" +type+",updateTime="+updateTime +",user="+user+",version="+version +"]";
+	}
+	
 
 }

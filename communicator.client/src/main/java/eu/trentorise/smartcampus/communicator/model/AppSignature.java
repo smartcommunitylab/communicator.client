@@ -1,8 +1,15 @@
 package eu.trentorise.smartcampus.communicator.model;
 
+import java.io.IOException;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import eu.trentorise.smartcampus.network.JsonHelper;
 
 @XmlRootElement(name = "appsignature")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -36,6 +43,30 @@ public class AppSignature {
 
 	public void setAppId(String appId) {
 		this.appId = appId;
+	}
+	
+	/**
+	 * @param json
+	 * @return
+	
+	 */
+	public static AppSignature valueOf(String json)  {
+		try {
+			JSONObject o = new JSONObject(json);
+			AppSignature appSignature = new AppSignature();
+			appSignature.setApiKey(o.getString("apiKey"));
+			appSignature.setAppId(o.getString("appid"));
+			appSignature.setSenderId(o.getString("senderId"));
+			
+			return appSignature;
+		} catch (JSONException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Configuration [senderId=" + senderId + ", appid=" + appId+ ", apiKey=" + apiKey + "]";
 	}
 
 }

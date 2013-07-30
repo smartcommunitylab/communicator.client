@@ -8,30 +8,24 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.NotificationAuthor;
+import eu.trentorise.smartcampus.communicator.model.Notifications;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/spring/applicationContext.xml")
+
 public class TestClientApp {
 
-	private static final String CLIENTNAME = "clientname";
-	private static final String AUTH_TOKEN = "Bearer dc8f4ef0-c810-4f56-a9b0-2627fe77b040";
-	@Autowired
 	private CommunicatorConnector communicatorConnector;
 
 	@Before
 	public void setup() throws Exception {
-
+		communicatorConnector = new CommunicatorConnector(
+				Constants.BASIC_PROFILE_SRV_URL, Constants.APPID);
 	}
 
-	public static final String REGISTRATIONID_HEADER = "REGISTRATIONID";
+
 
 	@Test
 	public void sendAppNotification() throws CommunicatorConnectorException {
@@ -48,8 +42,8 @@ public class TestClientApp {
 		author.setUserId("21");
 		notification.setAuthor(author);
 
-		communicatorConnector.sendAppNotification(notification, CLIENTNAME,
-				users, AUTH_TOKEN);
+		communicatorConnector.sendAppNotification(notification, Constants.APPID,
+				users, Constants.CLIENT_AUTH_TOKEN);
 
 	}
 
@@ -58,10 +52,10 @@ public class TestClientApp {
 	public void registerApp() throws CommunicatorConnectorException {
 		AppSignature signature = new AppSignature();
 		signature.setApiKey("AIzaSyBA0dQYoF2YQKwm6h5dH4q7h5DTt7LmJrw");
-		signature.setAppId(CLIENTNAME);
+		signature.setAppId(Constants.APPID);
 		signature.setSenderId("557126495282");
 		Assert.assertTrue(communicatorConnector.registerApp(signature,
-				CLIENTNAME, AUTH_TOKEN));
+				Constants.APPID, Constants.CLIENT_AUTH_TOKEN));
 
 	}
 
@@ -69,8 +63,8 @@ public class TestClientApp {
 	@Test
 	public void requestAppConfigurationToPush()
 			throws CommunicatorConnectorException {
-		Map<String, String> x = communicatorConnector
-				.requestAppConfigurationToPush(CLIENTNAME, AUTH_TOKEN);
+		Map<String, Object> x = communicatorConnector
+				.requestAppConfigurationToPush(Constants.APPID, Constants.CLIENT_AUTH_TOKEN);
 		Assert.assertNotNull(x);
 		Assert.assertNotSame(0, x.size());
 
@@ -79,52 +73,52 @@ public class TestClientApp {
 	// "/{capp}/notification")
 	@Test
 	public void getNotificationsByApp() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector
-				.getNotificationsByApp(0L, 0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector
+				.getNotificationsByApp(0L, 0, -1, Constants.CLIENT_AUTH_TOKEN);
 		Assert.assertNotNull(results);
-		Assert.assertNotSame(0, results.size());
+		Assert.assertNotSame(0, results.getNotifications().size());
 	}
 
 	// /{capp}/notification/{id}
 	@Test
 	public void getNotificationByApp() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector
-				.getNotificationsByApp(0L, 0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector
+				.getNotificationsByApp(0L, 0, -1, Constants.CLIENT_AUTH_TOKEN);
 
-		Notification notification = results.get(0);
+		Notification notification = results.getNotifications().get(0);
 		notification = communicatorConnector.getNotificationByApp(
-				notification.getId(), AUTH_TOKEN);
+				notification.getId(), Constants.CLIENT_AUTH_TOKEN);
 		Assert.assertNotNull(notification.getId());
 	}
 
 	// /{capp}/notification/{id}
 	@Test
 	public void updateByApp() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector
-				.getNotificationsByApp(0L, 0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector
+				.getNotificationsByApp(0L, 0, -1, Constants.CLIENT_AUTH_TOKEN);
 
-		Notification notification = results.get(0);
+		Notification notification = results.getNotifications().get(0);
 		notification.setStarred(true);
 		communicatorConnector.updateByApp(notification, notification.getId(),
-				AUTH_TOKEN);
+				Constants.CLIENT_AUTH_TOKEN);
 	}
 
 	// //{capp}/notification/{id}
 	@Test
 	public void deleteByApp() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector
-				.getNotificationsByApp(0L, 0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector
+				.getNotificationsByApp(0L, 0, -1, Constants.CLIENT_AUTH_TOKEN);
 
-		Notification notification = results.get(0);
+		Notification notification = results.getNotifications().get(0);
 
-		communicatorConnector.deleteByApp(notification.getId(), AUTH_TOKEN);
+		communicatorConnector.deleteByApp(notification.getId(), Constants.CLIENT_AUTH_TOKEN);
 
 	}
 
 	// /unregister/app/{appId}")
 	@Test
 	public void unregisterAppToPush() throws CommunicatorConnectorException {
-		communicatorConnector.unregisterAppToPush(AUTH_TOKEN);
+		communicatorConnector.unregisterAppToPush(Constants.CLIENT_AUTH_TOKEN);
 
 	}
 

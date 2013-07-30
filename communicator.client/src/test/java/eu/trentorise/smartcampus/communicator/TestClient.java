@@ -8,30 +8,24 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.NotificationAuthor;
+import eu.trentorise.smartcampus.communicator.model.Notifications;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/spring/applicationContext.xml")
 public class TestClient {
 
-	private static final String CLIENTNAME = "clientname";
-	private static final String AUTH_TOKEN = "Bearer dc8f4ef0-c810-4f56-a9b0-2627fe77b040";
+	
 
-	@Autowired
 	private CommunicatorConnector communicatorConnector;
 
 	@Before
 	public void setup() throws Exception {
-
+		communicatorConnector = new CommunicatorConnector(
+				Constants.BASIC_PROFILE_SRV_URL, Constants.APPID);
 	}
 
-	public static final String REGISTRATIONID_HEADER = "REGISTRATIONID";
+	
 
 	// /send/user")
 	@Test
@@ -43,22 +37,22 @@ public class TestClient {
 		Notification not = new Notification();
 		not.setDescription("Sei Registrato alle notifiche push");
 		not.setTitle("Sei Registrato alle notifiche push");
-		not.setType(CLIENTNAME);
+		not.setType(Constants.APPID);
 		not.setUser("21");
 		not.setId(null);
 		NotificationAuthor author = new NotificationAuthor();
 		author.setUserId("21");
 		not.setAuthor(author);
 
-		communicatorConnector.sendUserNotification(users, not, AUTH_TOKEN);
+		communicatorConnector.sendUserNotification(users, not, Constants.USER_AUTH_TOKEN);
 	}
 
 	// /configuration/user/{appid}")
 	@Test
 	public void requestUserConfigurationToPush()
 			throws CommunicatorConnectorException {
-		Map<String, String> x = communicatorConnector
-				.requestUserConfigurationToPush(CLIENTNAME, AUTH_TOKEN);
+		Map<String, Object> x = communicatorConnector
+				.requestUserConfigurationToPush(Constants.APPID, Constants.USER_AUTH_TOKEN);
 
 		Assert.assertNotNull(x);
 		Assert.assertNotSame(0, x.size());
@@ -81,10 +75,10 @@ public class TestClient {
 	// "/notification"
 	@Test
 	public void getNotifications() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector.getNotifications(0L,
-				0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
 		Assert.assertNotNull(results);
-		Assert.assertNotSame(0, results.size());
+		Assert.assertNotSame(0, results.getNotifications().size());
 
 	}
 
@@ -103,13 +97,13 @@ public class TestClient {
 	// /notification/{id}
 	@Test
 	public void updateNotification() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector.getNotifications(0L,
-				0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
 
-		Notification notification = results.get(0);
+		Notification notification = results.getNotifications().get(0);
 		notification.setStarred(true);
 		communicatorConnector.updateNotification(notification,
-				notification.getId(), AUTH_TOKEN);
+				notification.getId(), Constants.USER_AUTH_TOKEN);
 
 	}
 
@@ -126,12 +120,12 @@ public class TestClient {
 	// "/notification/{id}")
 	@Test
 	public void getNotification() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector.getNotifications(0L,
-				0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
 
-		Notification notification = results.get(0);
+		Notification notification = results.getNotifications().get(0);
 		notification = communicatorConnector.getNotification(
-				notification.getId(), AUTH_TOKEN);
+				notification.getId(), Constants.USER_AUTH_TOKEN);
 		Assert.assertNotNull(notification.getId());
 
 	}
@@ -148,13 +142,13 @@ public class TestClient {
 	// /notification/{id}
 	@Test
 	public void deleteNotification() throws CommunicatorConnectorException {
-		List<Notification> results = communicatorConnector.getNotifications(0L,
-				0, -1, AUTH_TOKEN);
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
 
-		Notification notification = results.get(0);
+		Notification notification = results.getNotifications().get(0);
 
 		communicatorConnector.deleteNotification(notification.getId(),
-				AUTH_TOKEN);
+				Constants.USER_AUTH_TOKEN);
 
 	}
 
