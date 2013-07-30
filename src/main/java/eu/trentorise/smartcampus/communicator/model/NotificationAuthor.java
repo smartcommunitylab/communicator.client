@@ -17,27 +17,52 @@ package eu.trentorise.smartcampus.communicator.model;
 
 import java.io.Serializable;
 
-/**
- * Author of a notification
- */
-public class NotificationAuthor implements Serializable{
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class NotificationAuthor implements Serializable {
 	private static final long serialVersionUID = -1045073082737340872L;
 
-	private Long socialId; // social id of the author
-	private String name; // name
+	private String appId;
+	private String userId;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
 	
-	public Long getSocialId() {
-		return socialId;
+	/**
+	 * @param json
+	 * @return
+	 * @throws JSONException 
+	 */
+	public static NotificationAuthor valueOf(String json)  {
+		try {
+			JSONObject o = new JSONObject(json);
+			NotificationAuthor notificationAuthor = new NotificationAuthor();
+			notificationAuthor.setAppId(o.getString("appId"));
+			notificationAuthor.setUserId(o.getString("userId"));
+			return notificationAuthor;
+		} catch (JSONException e) {
+			return null;
+		}
 	}
-	public void setSocialId(Long socialId) {
-		this.socialId = socialId;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+
+	@Override
+	public String toString() {
+		return "NotificationAuthor [ appId=" + appId + ", userId=" + userId + "]";
 	}
 	
-	
+
 }

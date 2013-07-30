@@ -2,113 +2,154 @@ package eu.trentorise.smartcampus.communicator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.trentorise.smartcampus.communicator.model.Notification;
+import eu.trentorise.smartcampus.communicator.model.NotificationAuthor;
+import eu.trentorise.smartcampus.communicator.model.Notifications;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/spring/applicationContext.xml")
 public class TestClient {
 
-	private static final String AUTH_TOKEN = "aee58a92-d42d-42e8-b55e-12e4289586fc";
-	@Autowired
+	
+
 	private CommunicatorConnector communicatorConnector;
 
 	@Before
 	public void setup() throws Exception {
+		communicatorConnector = new CommunicatorConnector(
+				Constants.BASIC_PROFILE_SRV_URL, Constants.APPID);
 	}
 
+	
+
+	// /send/user")
 	@Test
-	public void testSend() throws Exception {
+	public void sendUserNotification() throws CommunicatorConnectorException {
 		List<String> users = new ArrayList<String>();
 		users.add("39");
 		users.add("40");
-		
-		Notification notification = new Notification();
-		notification.setTitle("Test notification");
-		notification.setUser("39");
-		
-		communicatorConnector.sendAppNotification(notification, "test_app", users, AUTH_TOKEN);
-	}
-	
-	@Test
-	public void testRegisterApp() throws Exception {
-		
-		communicatorConnector.registerApp(AUTH_TOKEN, "AIzaSyDfJLeK-_oXCS-PlMuwVmxmE2gcBtWe-_k","557126495282");
-		
-	
-	}
-	
-	@Test
-	public void testRegisterUser() throws Exception {
-		
-		communicatorConnector.registerUser(AUTH_TOKEN, "prova1");
-	
-	}
-	
-	@Test
-	public void testUnRegisterUser() throws Exception {
-		
 
-		
-		communicatorConnector.unregisterUser(AUTH_TOKEN);
+		Notification not = new Notification();
+		not.setDescription("Sei Registrato alle notifiche push");
+		not.setTitle("Sei Registrato alle notifiche push");
+		not.setType(Constants.APPID);
+		not.setUser("21");
+		not.setId(null);
+		NotificationAuthor author = new NotificationAuthor();
+		author.setUserId("21");
+		not.setAuthor(author);
+
+		communicatorConnector.sendUserNotification(users, not, Constants.USER_AUTH_TOKEN);
 	}
-	
+
+	// /configuration/user/{appid}")
 	@Test
-	public void testCRUD() throws Exception {
+	public void requestUserConfigurationToPush()
+			throws CommunicatorConnectorException {
+		Map<String, Object> x = communicatorConnector
+				.requestUserConfigurationToPush(Constants.APPID, Constants.USER_AUTH_TOKEN);
 
-			// create two notifications
-			Notification notification = new Notification();
-			notification.setTitle("Test notification");
-			notification.setUser("39");
-			notification.setTimestamp(System.currentTimeMillis());
+		Assert.assertNotNull(x);
+		Assert.assertNotSame(0, x.size());
+	}
 
-			// get all notifications
-			List<Notification> results = communicatorConnector.getNotifications(0L, 0, -1, AUTH_TOKEN);
-			Assert.assertNotNull(results);
-			Assert.assertNotSame(0, results.size());
-			System.out.println(results);
-			Notification notification2 = results.get(0);
-			
-			// get no future notifications
-			results = communicatorConnector.getNotifications(System.currentTimeMillis(), 0, -1, AUTH_TOKEN);
-			Assert.assertNotNull(results);
-			Assert.assertSame(0, results.size());
-			System.out.println(results);
-			
-			// get one notification
-			results = communicatorConnector.getNotifications(0L, 1, 1, AUTH_TOKEN);
-			Assert.assertNotNull(results);
-			Assert.assertSame(1, results.size());
-			System.out.println(results);			
-		
-			
-			notification = communicatorConnector.getNotification(notification2.getId(), AUTH_TOKEN);
-			Assert.assertNotNull(notification.getId());
-			Assert.assertFalse(notification.isStarred());
-			System.out.println(notification.getTitle() + " / " + notification.isStarred());
-			
-			notification.setStarred(true);
-			communicatorConnector.updateNotification(notification, notification2.getId(), AUTH_TOKEN);
-			
-			notification = communicatorConnector.getNotification(notification2.getId(), AUTH_TOKEN);
-			Assert.assertNotNull(notification);
-			Assert.assertTrue(notification.isStarred());			
-			System.out.println(notification.getTitle() + " / " + notification.isStarred());
-			
-			communicatorConnector.deleteNotification(notification.getId(), AUTH_TOKEN);
-			
-			notification = communicatorConnector.getNotification(notification.getId(), AUTH_TOKEN);
-			System.out.println(notification);
-			
+	/**
+	 * Get notifications of the user
+	 * 
+	 * @param since
+	 *            since date, in milliseconds (use 0L for every time)
+	 * @param position
+	 *            position in the result set
+	 * @param count
+	 *            number of results (use -1L for all)
+	 * @param token
+	 *            an authorization token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
+	// "/notification"
+	@Test
+	public void getNotifications() throws CommunicatorConnectorException {
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
+		Assert.assertNotNull(results);
+		Assert.assertNotSame(0, results.getNotifications().size());
+
+	}
+
+	/**
+	 * Update a notification (only starred and labelIds values are currently
+	 * updated)
+	 * 
+	 * @param notification
+	 *            a notification
+	 * @param id
+	 *            the id of the notification to update
+	 * @param token
+	 *            an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
+	// /notification/{id}
+	@Test
+	public void updateNotification() throws CommunicatorConnectorException {
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
+
+		Notification notification = results.getNotifications().get(0);
+		notification.setStarred(true);
+		communicatorConnector.updateNotification(notification,
+				notification.getId(), Constants.USER_AUTH_TOKEN);
+
+	}
+
+	/**
+	 * Get a notification by id
+	 * 
+	 * @param id
+	 *            a notification id
+	 * @param token
+	 *            an authorization token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
+	// "/notification/{id}")
+	@Test
+	public void getNotification() throws CommunicatorConnectorException {
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
+
+		Notification notification = results.getNotifications().get(0);
+		notification = communicatorConnector.getNotification(
+				notification.getId(), Constants.USER_AUTH_TOKEN);
+		Assert.assertNotNull(notification.getId());
+
+	}
+
+	/**
+	 * Delete a notification
+	 * 
+	 * @param id
+	 *            the id of the notification to delete
+	 * @param token
+	 *            an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
+	// /notification/{id}
+	@Test
+	public void deleteNotification() throws CommunicatorConnectorException {
+		Notifications results = communicatorConnector.getNotifications(0L,
+				0, -1, Constants.USER_AUTH_TOKEN);
+
+		Notification notification = results.getNotifications().get(0);
+
+		communicatorConnector.deleteNotification(notification.getId(),
+				Constants.USER_AUTH_TOKEN);
+
 	}
 
 }

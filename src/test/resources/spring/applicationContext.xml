@@ -29,12 +29,13 @@
     http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
 
 	<bean id="communicatorConnector" class="eu.trentorise.smartcampus.communicator.CommunicatorConnector">
-		<!--
-		<constructor-arg value="https://vas-dev.smartcampuslab.it/"/>
-		 -->
+		
+	
 		 
-		 <constructor-arg value="http://localhost:8081/communicatorservice"/> 
-		  <constructor-arg value="test"/> 
+		 
+		 <constructor-arg value="http://localhost:6374/smartcampus.communicator"/> 
+		 	<constructor-arg value="clientname"/>
+	
 	</bean>
 
 </beans>

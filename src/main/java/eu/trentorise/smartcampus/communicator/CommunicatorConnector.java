@@ -1,23 +1,18 @@
 package eu.trentorise.smartcampus.communicator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import eu.trentorise.smartcampus.communicator.model.AppAccount;
 import eu.trentorise.smartcampus.communicator.model.AppSignature;
-import eu.trentorise.smartcampus.communicator.model.ListAppAccount;
-import eu.trentorise.smartcampus.communicator.model.ListUserAccount;
 import eu.trentorise.smartcampus.communicator.model.Notification;
-import eu.trentorise.smartcampus.communicator.model.UserAccount;
+import eu.trentorise.smartcampus.communicator.model.Notifications;
 import eu.trentorise.smartcampus.communicator.model.UserSignature;
-import eu.trentorise.smartcampus.communicator.util.HTTPConnector;
-import eu.trentorise.smartcampus.communicator.util.HttpMethod;
+import eu.trentorise.smartcampus.network.JsonHelper;
+import eu.trentorise.smartcampus.network.RemoteConnector;
 
 /**
  * Class used to connect with the communicator service.
@@ -25,16 +20,9 @@ import eu.trentorise.smartcampus.communicator.util.HttpMethod;
  */
 public class CommunicatorConnector {
 
-	public static final String REGISTRATIONID_HEADER = "REGISTRATIONID";
-
-	private static final Logger logger = Logger
-			.getLogger(CommunicatorConnector.class);
-
-	private static final String NOTIFICATION = "eu.trentorise.smartcampus.communicator.model.Notification/";
 
 	private String communicatorURL;
-
-	private String appName;
+	private String appId;
 
 	/**
 	 * 
@@ -43,10 +31,10 @@ public class CommunicatorConnector {
 	 * @param appName
 	 *            name of app
 	 */
-	public CommunicatorConnector(String serverURL, String appName) {
-		this.appName = appName;
-		communicatorURL = serverURL;
-		communicatorURL += (serverURL.endsWith("/")) ? "" : "/";
+	public CommunicatorConnector(String serverURL, String appId) {
+		this.communicatorURL = serverURL;
+		if (!communicatorURL.endsWith("/")) communicatorURL += '/';
+		this.setAppId(appId);
 	}
 
 	/**
@@ -63,32 +51,22 @@ public class CommunicatorConnector {
 	 * @return
 	 * @throws CommunicatorConnectorException
 	 */
-	public List<Notification> getNotifications(Long since, Integer position,
+	// "/notification"
+	public Notifications getNotifications(Long since, Integer position,
 			Integer count, String token) throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + NOTIFICATION;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+		
 			Map<String, Object> map = new TreeMap<String, Object>();
 			map.put("since", since);
 			map.put("position", position);
 			map.put("count", count);
 
-			String resp = HTTPConnector.doGet(url, map, "application/json",
-					"application/json", token, "UTF-8");
+			String resp = RemoteConnector.getJSON(communicatorURL, Constants.NOTIFICATION, token,map);
 
-			@SuppressWarnings("rawtypes")
-			List list = mapper.readValue(resp, List.class);
-			List<Notification> result = new ArrayList<Notification>();
-			for (Object o : list) {
-				Notification notification = mapper.convertValue(o,
-						Notification.class);
-				result.add(notification);
-			}
-
-			return result;
+			
+			return Notifications.valueOf(resp);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CommunicatorConnectorException(e);
 		}
 	}
@@ -103,19 +81,15 @@ public class CommunicatorConnector {
 	 * @return
 	 * @throws CommunicatorConnectorException
 	 */
+	// "/notification/{id}")
 	public Notification getNotification(String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + NOTIFICATION + id;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			
+			String resp = RemoteConnector.getJSON(communicatorURL, Constants.NOTIFICATION + "/" + id, token);
+			
 
-			String resp = HTTPConnector.doGet(url, null, "application/json",
-					"application/json", token, "UTF-8");
-
-			Notification result = mapper.readValue(resp, Notification.class);
-
-			return result;
+			return Notification.valueOf(resp);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -133,18 +107,12 @@ public class CommunicatorConnector {
 	 *            an authorization token
 	 * @throws CommunicatorConnectorException
 	 */
+	// /notification/{id}
 	public void updateNotification(Notification notification, String id,
 			String token) throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + NOTIFICATION + id;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			String not = mapper.writeValueAsString(notification);
-			// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
-			// "application/json", "application/json", token, "UTF-8");
-			HTTPConnector.doPost(HttpMethod.PUT, url, null, not,
-					"application/json", "application/json", token);
+		
+			RemoteConnector.putJSON(communicatorURL, Constants.NOTIFICATION + "/" + id,new JSONObject(notification).toString(), token);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -159,20 +127,236 @@ public class CommunicatorConnector {
 	 *            an authorization token
 	 * @throws CommunicatorConnectorException
 	 */
+	// /notification/{id}
 	public void deleteNotification(String id, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + NOTIFICATION + id;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-			HTTPConnector.doPost(HttpMethod.DELETE, url, null, null,
-					"application/json", "application/json", token);
+			RemoteConnector.deleteJSON(communicatorURL, Constants.NOTIFICATION + "/" + id, token);
+	
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
 	}
 
+	// "/{capp}/notification")
+	public Notifications getNotificationsByApp(Long since,
+			Integer position, Integer count, String token)
+			throws CommunicatorConnectorException {
+		try {
+		
+			
+
+			Map<String, Object> map = new TreeMap<String, Object>();
+			map.put("since", since);
+			map.put("position", position);
+			map.put("count", count);
+
+	String resp = RemoteConnector.getJSON(communicatorURL, Constants.BYAPP + appId + "/" + Constants.NOTIFICATION, token,map);
+
+			
+			return Notifications.valueOf(resp);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// /{capp}/notification/{id}
+	public Notification getNotificationByApp(String id, String token)
+			throws CommunicatorConnectorException {
+		try {
+			
+	String resp = RemoteConnector.getJSON(communicatorURL, Constants.BYAPP + appId + "/" + Constants.NOTIFICATION
+			+ "/" + id, token);
+			
+
+			return Notification.valueOf(resp);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	/**
+	 * Update a notification (only starred and labelIds values are currently
+	 * updated)
+	 * 
+	 * @param notification
+	 *            a notification
+	 * @param id
+	 *            the id of the notification to update
+	 * @param token
+	 *            an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
+	// /{capp}/notification/{id}
+	public void updateByApp(Notification notification, String id, String token)
+			throws CommunicatorConnectorException {
+		try {
+		
+			
+			RemoteConnector.putJSON(communicatorURL, Constants.BYAPP + appId + "/" + Constants.NOTIFICATION
+					+ "/" + id,new JSONObject(notification).toString(), token);
+	
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	/**
+	 * Delete a notification
+	 * 
+	 * @param id
+	 *            the id of the notification to delete
+	 * @param token
+	 *            an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
+	// //{capp}/notification/{id}
+	public void deleteByApp(String id, String token)
+			throws CommunicatorConnectorException {
+		try {
+		
+				
+			RemoteConnector.deleteJSON(communicatorURL, Constants.BYAPP + appId + "/" + Constants.NOTIFICATION
+					+ "/" + id, token);
+			
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// /user/notification
+	public Notifications getNotificationsByUser(Long since,
+			Integer position, Integer count, String token)
+			throws CommunicatorConnectorException {
+		try {
+		
+
+			Map<String, Object> map = new TreeMap<String, Object>();
+			map.put("since", since);
+			map.put("position", position);
+			map.put("count", count);
+
+	String resp = RemoteConnector.getJSON(communicatorURL, Constants.BYUSER + Constants.NOTIFICATION, token,map);
+
+			
+			return Notifications.valueOf(resp);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// /{user/notification/{id}
+	public Notification getNotificationByUser(String id, String token)
+			throws CommunicatorConnectorException {
+		try {
+			
+			String resp = RemoteConnector.getJSON(communicatorURL, Constants.BYUSER + Constants.NOTIFICATION + "/" + id, token);
+					
+
+					return Notification.valueOf(resp);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	/**
+	 * Update a notification (only starred and labelIds values are currently
+	 * updated)
+	 * 
+	 * @param notification
+	 *            a notification
+	 * @param id
+	 *            the id of the notification to update
+	 * @param token
+	 *            an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
+	// /user/notification/{id}
+	public void updateByUser(Notification notification, String id, String token)
+			throws CommunicatorConnectorException {
+		try {
+
+			RemoteConnector.putJSON(communicatorURL, Constants.BYUSER + Constants.NOTIFICATION + "/" + id,new JSONObject(notification).toString(), token);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	/**
+	 * Delete a notification
+	 * 
+	 * @param id
+	 *            the id of the notification to delete
+	 * @param token
+	 *            an authorization token
+	 * @throws CommunicatorConnectorException
+	 */
+	// //user/notification/{id}
+	public void deleteByUser(String id, String token)
+			throws CommunicatorConnectorException {
+		try {
+		
+			RemoteConnector.deleteJSON(communicatorURL, Constants.BYUSER + Constants.NOTIFICATION + "/" + id, token);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// "/register/app/{appid}")
+	public boolean registerApp(AppSignature signature, String appid,
+			String token) throws CommunicatorConnectorException {
+		try {
+
+			RemoteConnector.postJSON(communicatorURL,"register/" + Constants.BYAPP + appid,new JSONObject(signature).toString(), token);
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// "/register/user/{appid}/user")
+	public boolean registerUserToPush(String appid, UserSignature signature,
+			String token) throws CommunicatorConnectorException {
+		try {
+			
+			RemoteConnector.postJSON(communicatorURL,"register/" + Constants.BYUSER + appid,new JSONObject(signature).toString(), token);
+			
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// /unregister/user/{appId}/{userid}")
+	public void unregisterUserToPush(String userid, String token)
+			throws CommunicatorConnectorException {
+		try {
+			
+			RemoteConnector.deleteJSON(communicatorURL,"unregister/" + Constants.BYUSER + appId+"/"+userid, token);
+			
+
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// /unregister/app/{appId}")
+	public void unregisterAppToPush(String token)
+			throws CommunicatorConnectorException {
+		try {
+		
+			RemoteConnector.deleteJSON(communicatorURL,"unregister/" + Constants.BYAPP + appId, token);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	// /send/app/{appId}")
 	/**
 	 * Send a notification as an application
 	 * 
@@ -190,268 +374,72 @@ public class CommunicatorConnector {
 			List<String> users, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "send/app/" + appId;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			
 
-			String ids = mapper.writeValueAsString(users);
-			Map<String, String> map = new TreeMap<String, String>();
-			map.put("users", ids);
+		
+			Map<String, Object> map = new TreeMap<String, Object>();
+			map.put("users", new JSONArray(users));
 
-			String not = mapper.writeValueAsString(notification);
-			// HTTPConnector.doPostWithReturn(HttpMethod.PUT, url, null, not,
-			// "application/json", "application/json", token, "UTF-8");
-			HTTPConnector.doPost(HttpMethod.POST, url, map, not,
-					"application/json", "application/json", token);
+			RemoteConnector.postJSON(communicatorURL,"send/app/" + appId,new JSONObject(notification).toString(), token,map);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new CommunicatorConnectorException(e);
 		}
 	}
 
-/**
- 	 * retrieves all the user communicator accounts binded to the application name and to the authentication token
-	 * @param authToken the authentication token
-	 * @return list of {@link UserAccount)
-	 * @throws CommunicatorConnectorException
-	 */
-	public List<UserAccount> getUserAccounts(String authToken)
-			throws CommunicatorConnectorException {
-
-		try {
-
-			String url = communicatorURL + "/useraccount/" + appName;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			String resp = HTTPConnector.doGet(url, null, null,
-					"application/json", authToken, "UTF-8");
-			List<UserAccount> result = mapper.readValue(resp,
-					ListUserAccount.class).getUserAccounts();
-			return result;
-
-		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
-			throw new CommunicatorConnectorException(e);
-		}
-
-	}
-
-	/**
-	 * retrieves all the application communicator account binded to the
-	 * application name
-	 * 
-	 * @return the list of {@link AppAccount}
-	 * @throws CommunicatorConnectorException
-	 */
-	public List<AppAccount> getAppAccounts()
+	// /send/user")
+	public void sendUserNotification(List<String> users,
+			Notification notification, String token)
 			throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "/appaccount/" + appName;
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			
+			Map<String, Object> map = new TreeMap<String, Object>();
+			map.put("users", new JSONArray(users));
 
-			String resp = HTTPConnector.doGet(url, null, null,
-					"application/json", null, "UTF-8");
-			List<AppAccount> result = mapper.readValue(resp,
-					ListAppAccount.class).getAppAccounts();
-			return result;
-
+			RemoteConnector.postJSON(communicatorURL, "send/user",new JSONObject(notification).toString(), token,map);
 		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
+			e.printStackTrace();
 			throw new CommunicatorConnectorException(e);
 		}
 	}
 
-	/**
-	 * stores an user communicator account
-	 * 
-	 * @param authToken
-	 *            authentication token
-	 * @param userAccount
-	 *            userAccount to store
-	 * @return the {@link UserAccount} stored
-	 * @throws CommunicatorConnectorException
-	 * @throws CommunicatorConnectorException
-	 */
-	public UserAccount storeUserAccount(String authToken,
-			UserAccount userAccount) throws CommunicatorConnectorException {
-
+	// /configuration/app/{appid}")
+	public Map<String, Object> requestAppConfigurationToPush(String appid,
+			String token) throws CommunicatorConnectorException {
 		try {
-			String url = communicatorURL + "/useraccount/" + appName;
-
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			String ids = mapper.writeValueAsString(userAccount);
-			Map<String, String> map = new TreeMap<String, String>();
-			map.put("users", ids);
-
-			String userAccountAsString = mapper.writeValueAsString(userAccount);
-
-			String resp = HTTPConnector.doPostWithReturn(HttpMethod.POST, url,
-					map, userAccountAsString, "application/json",
-					"application/json", authToken, "UTF-8");
-
-			UserAccount result = mapper.readValue(resp, UserAccount.class);
-			return result;
-
-		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
-			throw new CommunicatorConnectorException(e);
-		}
-
-	}
-
-	/**
-	 * regiter an user pushservice
-	 * 
-	 * @param authToken
-	 *            authentication token
-	 * @param registrationId
-	 *            user googleid to pushservice
-	 * @throws CommunicatorConnectorException
-	 * @throws CommunicatorConnectorException
-	 */
-	public String registerUser(String authToken, String registrationId)
-			throws CommunicatorConnectorException {
-
-		try {
-			String url = communicatorURL + "register/user";
-
-			UserSignature userSignature = new UserSignature();
-			userSignature.setAppName(appName);
-			userSignature.setRegistrationId(registrationId);
-
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			// String ids = mapper.writeValueAsString(userAccount);
-			Map<String, String> map = new TreeMap<String, String>();
-			// map.put(REGISTRATIONID_HEADER, registrationId);
-
-			String userSignatureAsString = mapper
-					.writeValueAsString(userSignature);
-
-			String resp = HTTPConnector.doPostWithReturn(HttpMethod.POST, url,
-					map, userSignatureAsString, "application/json",
-					"application/json", authToken, "UTF-8");
-
-			return resp;
-
-		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
-			throw new CommunicatorConnectorException(e);
-		}
-
-	}
-
-	/**
-	 * stores an user pushservice
-	 * 
-	 * @param authToken
-	 *            authentication token
-	 * @param registrationId
-	 *            user googleid to store
-	 * @throws CommunicatorConnectorException
-	 * @throws CommunicatorConnectorException
-	 */
-	public String unregisterUser(String authToken)
-			throws CommunicatorConnectorException {
-
-		try {
-			String url = communicatorURL + "unregister/user/" + appName;
-
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			String resp = HTTPConnector.doGet(url, null, "application/json",
-					"application/json", authToken, "UTF-8");
-
-			return resp;
-
-		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
-			throw new CommunicatorConnectorException(e);
-		}
-
-	}
-
-	/**
-	 * stores an app communicator account
-	 * 
-	 * @param authToken
-	 *            authentication token
-	 * 
-	 * @throws CommunicatorConnectorException
-	 * @throws CommunicatorConnectorException
-	 */
-	public String registerApp(String authToken, String apikey, String senderid)
-			throws CommunicatorConnectorException {
-
-		try {
-			String url = communicatorURL + "register/app";
-
-			AppSignature appSignature = new AppSignature();
-			appSignature.setApiKey(apikey);
-			appSignature.setAppName(appName);
-			appSignature.setSenderId(senderid);
-
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-			// String ids = mapper.writeValueAsString(userAccount);
-			Map<String, String> map = new TreeMap<String, String>();
-			// map.put("users", ids);
-			// map.put(APIKEY_HEADER, apikey);
-			// map.put(SENDERID_HEADER, senderid);
-
-			String appSignatureAsString = mapper
-					.writeValueAsString(appSignature);
-
-			String resp = HTTPConnector.doPostWithReturn(HttpMethod.POST, url,
-					map, appSignatureAsString, "application/json",
-					"application/json", authToken, "UTF-8");
-
-			return resp;
-
-		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
-			throw new CommunicatorConnectorException(e);
-		}
-
-	}
-	
-	/**
-	 * get app push configuration
-	 * 
-	 * @param authToken
-	 *            authentication token
-	 * 
-	 * @throws CommunicatorConnectorException
-	 * @throws CommunicatorConnectorException
-	 */
-	public Map<String, String> getAppConfig(String authToken)
-			throws CommunicatorConnectorException {
-
-		try {
-			String url = communicatorURL + "configuration/"+appName;
+				
+			String resp = RemoteConnector.getJSON(communicatorURL, "configuration/" + Constants.BYAPP + appid, token);
 		
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-			String resp = HTTPConnector.doGet(url, null, "application/json",
-					"application/json", authToken, "UTF-8");
-
-			Map<String, String> result = mapper.readValue(resp, Map.class);
-
-			return result;
+			return JsonHelper.toMap(new JSONObject(resp));
 
 		} catch (Exception e) {
-			logger.error("Exception getting user accounts", e);
 			throw new CommunicatorConnectorException(e);
 		}
+	}
 
+	// /configuration/user/{appid}")
+	public Map<String, Object> requestUserConfigurationToPush(String appid,
+			String token) throws CommunicatorConnectorException {
+		try {
+			
+			String resp = RemoteConnector.getJSON(communicatorURL,"configuration/" + Constants.BYUSER + appid, token);
+			
+
+			return JsonHelper.toMap(new JSONObject(resp));
+
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
 	}
 
 }

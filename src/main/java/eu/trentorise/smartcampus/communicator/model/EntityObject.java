@@ -18,17 +18,14 @@ package eu.trentorise.smartcampus.communicator.model;
 import java.io.Serializable;
 import java.util.Map;
 
-/**
- * A social entity object tied to a notification
- */
 public class EntityObject implements Serializable {
 	private static final long serialVersionUID = -1405310311956833390L;
 
-	private String type; // type
-	private String id; // id
-	private Map<String, Object> data; // data
-	private String title; // title
-	private Long entityId; // id of the entity
+	private String type;
+	private String id;
+	private Map<String, Object> data;
+	private String title;
+	private Long entityId;
 
 	public String getType() {
 		return type;
