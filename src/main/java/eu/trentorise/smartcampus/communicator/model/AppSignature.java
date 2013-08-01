@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import eu.trentorise.smartcampus.network.JsonHelper;
+import eu.trentorise.smartcampus.network.JsonUtils;
 
 @XmlRootElement(name = "appsignature")
 @XmlAccessorType(XmlAccessType.FIELD)

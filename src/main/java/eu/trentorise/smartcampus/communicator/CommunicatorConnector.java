@@ -11,7 +11,7 @@ import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.Notifications;
 import eu.trentorise.smartcampus.communicator.model.UserSignature;
-import eu.trentorise.smartcampus.network.JsonHelper;
+import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.network.RemoteConnector;
 
 /**
@@ -152,7 +152,7 @@ public class CommunicatorConnector {
 			map.put("position", position);
 			map.put("count", count);
 
-	String resp = RemoteConnector.getJSON(communicatorURL, Constants.BYAPP + appId + "/" + Constants.NOTIFICATION, token,map);
+			String resp = RemoteConnector.getJSON(communicatorURL, Constants.BYAPP + appId + "/" + Constants.NOTIFICATION, token,map);
 
 			
 			return Notifications.valueOf(resp);
@@ -333,11 +333,11 @@ public class CommunicatorConnector {
 	}
 
 	// /unregister/user/{appId}/{userid}")
-	public void unregisterUserToPush(String userid, String token)
+	public void unregisterUserToPush(String appId, String token)
 			throws CommunicatorConnectorException {
 		try {
 			
-			RemoteConnector.deleteJSON(communicatorURL,"unregister/" + Constants.BYUSER + appId+"/"+userid, token);
+			RemoteConnector.deleteJSON(communicatorURL,"unregister/" + Constants.BYUSER + appId, token);
 			
 
 		} catch (Exception e) {
@@ -378,7 +378,7 @@ public class CommunicatorConnector {
 
 		
 			Map<String, Object> map = new TreeMap<String, Object>();
-			map.put("users", new JSONArray(users));
+			map.put("users", users);
 
 			RemoteConnector.postJSON(communicatorURL,"send/app/" + appId,new JSONObject(notification).toString(), token,map);
 			
@@ -395,7 +395,7 @@ public class CommunicatorConnector {
 		try {
 			
 			Map<String, Object> map = new TreeMap<String, Object>();
-			map.put("users", new JSONArray(users));
+			map.put("users", users);
 
 			RemoteConnector.postJSON(communicatorURL, "send/user",new JSONObject(notification).toString(), token,map);
 		} catch (Exception e) {
@@ -412,7 +412,7 @@ public class CommunicatorConnector {
 			String resp = RemoteConnector.getJSON(communicatorURL, "configuration/" + Constants.BYAPP + appid, token);
 		
 
-			return JsonHelper.toMap(new JSONObject(resp));
+			return JsonUtils.toMap(new JSONObject(resp));
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
@@ -427,7 +427,7 @@ public class CommunicatorConnector {
 			String resp = RemoteConnector.getJSON(communicatorURL,"configuration/" + Constants.BYUSER + appid, token);
 			
 
-			return JsonHelper.toMap(new JSONObject(resp));
+			return JsonUtils.toMap(new JSONObject(resp));
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);

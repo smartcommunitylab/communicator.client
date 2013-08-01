@@ -22,7 +22,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import eu.trentorise.smartcampus.network.JsonHelper;
+import eu.trentorise.smartcampus.network.JsonUtils;
 
 /**
  * Class representing a notification
@@ -193,12 +193,11 @@ public class Notification {
 			JSONObject o = new JSONObject(json);
 			Notification notification = new Notification();
 			notification.setAuthor(NotificationAuthor.valueOf(o.getString("author")));
-			notification.setChannelIds(JsonHelper.toList(o.getJSONArray("channelIds")));
-			notification.setContent(JsonHelper.toMap(o.getJSONObject("content")));
+			
 			notification.setDescription(o.getString("description"));
-			notification.setEntities(JsonHelper.toList(o.getJSONArray("entities")));
+			
 			notification.setId(o.getString("id"));
-			notification.setLabelIds(JsonHelper.toList(o.getJSONArray("labelIds")));
+			
 			notification.setReaded(o.getBoolean("readed"));
 			notification.setStarred(o.getBoolean("starred"));
 			notification.setTimestamp(o.getLong("timestamp"));
@@ -207,6 +206,14 @@ public class Notification {
 			notification.setUpdateTime(o.getLong("updateTime"));
 			notification.setUser(o.getString("user"));
 			notification.setVersion(o.getLong("version"));
+			if(!o.isNull("channelIds"))
+				notification.setChannelIds(JsonUtils.toList(o.getJSONArray("channelIds")));
+			if(!o.isNull("content"))
+				notification.setContent(JsonUtils.toMap(o.getJSONObject("content")));
+			if(!o.isNull("entities"))
+				notification.setEntities(JsonUtils.toList(o.getJSONArray("entities")));
+			if(!o.isNull("labelIds"))
+				notification.setLabelIds(JsonUtils.toList(o.getJSONArray("labelIds")));
 			
 			
 			return notification;

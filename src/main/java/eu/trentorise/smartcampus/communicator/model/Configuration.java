@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import eu.trentorise.smartcampus.network.JsonHelper;
+import eu.trentorise.smartcampus.network.JsonUtils;
 
 /**
  * <i>Configuration</i> is the representation of a configuration in a user
@@ -61,13 +61,13 @@ public class Configuration {
 	}
 
 	public void setListValue(Map<String, Object> listValue) throws IOException, JSONException {
-		this.listValue = (String) JsonHelper.toJSON(listValue);
+		this.listValue = (String) JsonUtils.toJSON(listValue);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getListValue() {
 		try {
-			return (Map<String, Object>) JsonHelper.toJSON(listValue);
+			return (Map<String, Object>) JsonUtils.toJSON(listValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -86,7 +86,7 @@ public class Configuration {
 			Configuration configuration = new Configuration();
 			configuration.setKey(CloudToPushType.valueOf(o
 					.getString("cloudpushtype")));
-			configuration.setListValue(JsonHelper.toMap(o
+			configuration.setListValue(JsonUtils.toMap(o
 					.getJSONObject("listValue")));
 			return configuration;
 		} catch (JSONException e) {
