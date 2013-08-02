@@ -1,16 +1,11 @@
 package eu.trentorise.smartcampus.communicator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import eu.trentorise.smartcampus.communicator.model.Notification;
-import eu.trentorise.smartcampus.communicator.model.NotificationAuthor;
 import eu.trentorise.smartcampus.communicator.model.Notifications;
 
 public class TestClient {
