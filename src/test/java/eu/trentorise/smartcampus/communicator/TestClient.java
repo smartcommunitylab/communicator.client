@@ -17,7 +17,7 @@ public class TestClient {
 	@Before
 	public void setup() throws Exception {
 		communicatorConnector = new CommunicatorConnector(
-				Constants.COMMUNICATOR_SRV_URL, Constants.APPID);
+				ConstantsTest.COMMUNICATOR_SRV_URL, ConstantsTest.APPID);
 	}
 
 	
@@ -27,14 +27,14 @@ public class TestClient {
 	public void testAll() throws CommunicatorConnectorException {
 	
 		Notifications results = communicatorConnector.getNotifications(0L,
-				0, -1, Constants.USER_AUTH_TOKEN);
+				0, -1, ConstantsTest.USER_AUTH_TOKEN);
 		Assert.assertNotNull(results);
 		Assert.assertNotSame(0, results.getNotifications().size());
 		
 		
 		Notification notification = results.getNotifications().get(0);
 		notification = communicatorConnector.getNotification(
-				notification.getId(), Constants.USER_AUTH_TOKEN);
+				notification.getId(), ConstantsTest.USER_AUTH_TOKEN);
 		Assert.assertNotNull(notification.getId());
 		
 		
@@ -42,7 +42,7 @@ public class TestClient {
 		 notification = results.getNotifications().get(0);
 		notification.setStarred(true);
 		communicatorConnector.updateNotification(notification,
-				notification.getId(), Constants.USER_AUTH_TOKEN);
+				notification.getId(), ConstantsTest.USER_AUTH_TOKEN);
 		
 		
 
@@ -50,7 +50,7 @@ public class TestClient {
 				
 
 		communicatorConnector.deleteNotification(notification.getId(),
-				Constants.USER_AUTH_TOKEN);
+				ConstantsTest.USER_AUTH_TOKEN);
 
 	}
 
@@ -59,7 +59,7 @@ public class TestClient {
 //	public void requestUserConfigurationToPush()
 //			throws CommunicatorConnectorException {
 //		Map<String, Object> x = communicatorConnector
-//				.requestUserConfigurationToPush(Constants.APPID, Constants.USER_AUTH_TOKEN);
+//				.requestUserConfigurationToPush(ConstantsTest.APPID, ConstantsTest.USER_AUTH_TOKEN);
 //
 //		Assert.assertNotNull(x);
 //		Assert.assertNotSame(0, x.size());
@@ -83,7 +83,7 @@ public class TestClient {
 //	@Test
 //	public void getNotifications() throws CommunicatorConnectorException {
 //		Notifications results = communicatorConnector.getNotifications(0L,
-//				0, -1, Constants.USER_AUTH_TOKEN);
+//				0, -1, ConstantsTest.USER_AUTH_TOKEN);
 //		Assert.assertNotNull(results);
 //		Assert.assertNotSame(0, results.getNotifications().size());
 //
@@ -105,12 +105,12 @@ public class TestClient {
 //	@Test
 //	public void updateNotification() throws CommunicatorConnectorException {
 //		Notifications results = communicatorConnector.getNotifications(0L,
-//				0, -1, Constants.USER_AUTH_TOKEN);
+//				0, -1, ConstantsTest.USER_AUTH_TOKEN);
 //
 //		Notification notification = results.getNotifications().get(0);
 //		notification.setStarred(true);
 //		communicatorConnector.updateNotification(notification,
-//				notification.getId(), Constants.USER_AUTH_TOKEN);
+//				notification.getId(), ConstantsTest.USER_AUTH_TOKEN);
 //
 //	}
 //
@@ -128,11 +128,11 @@ public class TestClient {
 //	@Test
 //	public void getNotification() throws CommunicatorConnectorException {
 //		Notifications results = communicatorConnector.getNotifications(0L,
-//				0, -1, Constants.USER_AUTH_TOKEN);
+//				0, -1, ConstantsTest.USER_AUTH_TOKEN);
 //
 //		Notification notification = results.getNotifications().get(0);
 //		notification = communicatorConnector.getNotification(
-//				notification.getId(), Constants.USER_AUTH_TOKEN);
+//				notification.getId(), ConstantsTest.USER_AUTH_TOKEN);
 //		Assert.assertNotNull(notification.getId());
 //
 //	}
@@ -150,12 +150,12 @@ public class TestClient {
 //	@Test
 //	public void deleteNotification() throws CommunicatorConnectorException {
 //		Notifications results = communicatorConnector.getNotifications(0L,
-//				0, -1, Constants.USER_AUTH_TOKEN);
+//				0, -1, ConstantsTest.USER_AUTH_TOKEN);
 //
 //		Notification notification = results.getNotifications().get(0);
 //
 //		communicatorConnector.deleteNotification(notification.getId(),
-//				Constants.USER_AUTH_TOKEN);
+//				ConstantsTest.USER_AUTH_TOKEN);
 //
 //	}
 //

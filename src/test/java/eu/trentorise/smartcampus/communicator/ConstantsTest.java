@@ -19,7 +19,7 @@ package eu.trentorise.smartcampus.communicator;
  * @author mirko perillo
  * 
  */
-public class Constants {
+public class ConstantsTest {
 
 	static final String USER_AUTH_TOKEN = "58f2dbf6-caf1-4476-946d-2340a9fc4cd8";
 	static final String CLIENT_AUTH_TOKEN = "375e605e-badb-4e1a-9ceb-152296518a0e";
@@ -34,10 +34,6 @@ public class Constants {
 	static final String BASIC_PROFILE_SRV_URL = "http://localhost:8080/permission.provider";
 	static final String COMMUNICATOR_SRV_URL = "http://localhost:8081/smartcampus.communicator";
 	static final String APPID = "clientname";
-	static final String REGISTRATIONID_HEADER = "REGISTRATIONID";
 
-	static final String NOTIFICATION = "notification";
-	static final String BYAPP = "app/";
-	static final String BYUSER = "user/";
 
 }

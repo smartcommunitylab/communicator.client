@@ -11,6 +11,7 @@ import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.Notifications;
 import eu.trentorise.smartcampus.communicator.model.UserSignature;
+import eu.trentorise.smartcampus.communicator.util.Constants;
 import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.network.RemoteConnector;
 
