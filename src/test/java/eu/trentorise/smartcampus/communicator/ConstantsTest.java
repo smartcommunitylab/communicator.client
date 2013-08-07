@@ -21,8 +21,8 @@ package eu.trentorise.smartcampus.communicator;
  */
 public class ConstantsTest {
 
-	static final String USER_AUTH_TOKEN = "58f2dbf6-caf1-4476-946d-2340a9fc4cd8";
-	static final String CLIENT_AUTH_TOKEN = "375e605e-badb-4e1a-9ceb-152296518a0e";
+	static final String USER_AUTH_TOKEN = "f7624300-847b-4dd9-8a8a-c2772877a52d";
+	static final String CLIENT_AUTH_TOKEN = "4a6614cd-d4b5-473b-9c1c-f953c75cd0f2";
 
 	// static final String BASIC_PROFILE_SRV_URL =
 	// "https://vas-dev.smartcampuslab.it/aac";
@@ -32,7 +32,7 @@ public class ConstantsTest {
 	// "https://vas-dev.smartcampuslab.it/socialservice";
 
 	static final String BASIC_PROFILE_SRV_URL = "http://localhost:8080/permission.provider";
-	static final String COMMUNICATOR_SRV_URL = "http://localhost:8081/smartcampus.communicator";
+	static final String COMMUNICATOR_SRV_URL = "https://vas-dev.smartcampuslab.it/core.communicator";
 	static final String APPID = "clientname";
 
 

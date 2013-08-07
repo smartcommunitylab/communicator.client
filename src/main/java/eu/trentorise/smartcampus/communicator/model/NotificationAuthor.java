@@ -16,6 +16,8 @@
 package eu.trentorise.smartcampus.communicator.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,6 +64,13 @@ public class NotificationAuthor implements Serializable {
 	@Override
 	public String toString() {
 		return "NotificationAuthor [ appId=" + appId + ", userId=" + userId + "]";
+	}
+
+	public Map<String,Object> toMap() {
+		Map<String,Object> map= new HashMap<String, Object>();
+		map.put("appId", getAppId());
+		map.put("userId", getUserId());
+		return map;
 	}
 	
 

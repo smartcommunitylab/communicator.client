@@ -16,11 +16,13 @@
 package eu.trentorise.smartcampus.communicator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import eu.trentorise.smartcampus.network.JsonUtils;
 
@@ -229,6 +231,30 @@ public class Notification {
 				",description="+description +",entities="+entities +",id="+id +
 				",labelIds="+labelIds +",readed="+readed +",starred="+starred +",timestamp="+timestamp +
 				",title="+title +",type=" +type+",updateTime="+updateTime +",user="+user+",version="+version +"]";
+	}
+
+	
+	public Map<String,Object> toMap() {
+		// TODO Auto-generated method stub
+		
+		Map<String,Object> map= new HashMap<String, Object>();
+		map.put("id", getId());
+		map.put("content", getContent());
+		map.put("channelIds", getChannelIds());
+		map.put("entities", getEntities());
+		map.put("labelIds", getLabelIds());
+		map.put("version", getVersion());
+		map.put("user", getUser());
+		map.put("updateTime", getUpdateTime());
+		map.put("type", getType());
+		map.put("title", getTitle());
+		map.put("timestamp", getTimestamp());
+		map.put("starred", isStarred());
+		map.put("description", getDescription());
+		map.put("readed", isReaded());
+		map.put("author", getAuthor().toMap());
+		
+		return map;
 	}
 	
 
