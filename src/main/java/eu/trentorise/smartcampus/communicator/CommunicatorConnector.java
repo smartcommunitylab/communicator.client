@@ -446,7 +446,7 @@ public class CommunicatorConnector {
 				String token) throws CommunicatorConnectorException {
 			try {
 				
-				String resp = RemoteConnector.getJSON(communicatorURL,"configuration/" + appid, token);
+				String resp = RemoteConnector.getJSON(communicatorURL,"configuration/public/" + appid, token);
 				
 
 				return JsonUtils.toMap(new JSONObject(resp));
