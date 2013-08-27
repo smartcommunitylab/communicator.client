@@ -440,6 +440,21 @@ public class CommunicatorConnector {
 			throw new CommunicatorConnectorException(e);
 		}
 	}
+	
+	// /configuration/{appid}")
+		public Map<String, Object> requestPublicConfigurationToPush(String appid,
+				String token) throws CommunicatorConnectorException {
+			try {
+				
+				String resp = RemoteConnector.getJSON(communicatorURL,"configuration/" + appid, token);
+				
+
+				return JsonUtils.toMap(new JSONObject(resp));
+
+			} catch (Exception e) {
+				throw new CommunicatorConnectorException(e);
+			}
+		}
 
 	public String getAppId() {
 		return appId;
