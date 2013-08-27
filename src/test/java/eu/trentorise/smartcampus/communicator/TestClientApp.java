@@ -1,6 +1,7 @@
 package eu.trentorise.smartcampus.communicator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.NotificationAuthor;
 import eu.trentorise.smartcampus.communicator.model.Notifications;
+import eu.trentorise.smartcampus.communicator.util.Constants;
 
 
 public class TestClientApp {
@@ -44,9 +46,17 @@ public class TestClientApp {
 				users, ConstantsTest.CLIENT_AUTH_TOKEN);
 		
 		AppSignature signature = new AppSignature();
-		signature.setApiKey("AIzaSyBA0dQYoF2YQKwm6h5dH4q7h5DTt7LmJrw");
+	
 		signature.setAppId(ConstantsTest.APPID);
-		signature.setSenderId("557126495282");
+	
+		Map<String,Object> publiclist=new HashMap<String, Object>();
+		publiclist.put(Constants.GCM_SENDER_ID, "557126495282");
+		Map<String,Object> privatelist=new HashMap<String, Object>();
+		privatelist.put(Constants.GCM_SENDER_API_KEY, "AIzaSyBA0dQYoF2YQKwm6h5dH4q7h5DTt7LmJrw");
+		signature.setPrivateKey(privatelist);
+		signature.setPublicKey(publiclist);
+		
+		
 		Assert.assertTrue(communicatorConnector.registerApp(signature,
 				ConstantsTest.APPID, ConstantsTest.CLIENT_AUTH_TOKEN));
 		

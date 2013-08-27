@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,16 +42,27 @@ public class Configuration {
 
 	private CloudToPushType key;
 
-	private String listValue;
+	private String privateKey;
+
+	private String publicKey;
 
 	public Configuration() {
 
 	}
-
-	public Configuration(CloudToPushType key, Map<String, Object> listValue) throws IOException, JSONException {
+	
+	public Configuration(CloudToPushType key, Map<String, Object> privateKey,
+			Map<String, Object> publicKey) throws JSONException, IOException {
 		this.setKey(key);
-		this.setListValue(listValue);
+		this.setPublicKey(publicKey);
+		this.setPrivateKey(privateKey);
 	}
+
+	public Configuration(CloudToPushType key, Map<String, Object> privateKey)
+			throws  JSONException, IOException {
+		this.setKey(key);
+		this.setPrivateKey(privateKey);
+	}
+
 
 	public CloudToPushType getKey() {
 		return key;
@@ -60,14 +72,27 @@ public class Configuration {
 		this.key = key;
 	}
 
-	public void setListValue(Map<String, Object> listValue) throws IOException, JSONException {
-		this.listValue = (String) JsonUtils.toJSON(listValue);
+	public void setPublicKey(Map<String, Object> listValue) throws IOException, JSONException {
+		this.publicKey = (String) JsonUtils.toJSON(listValue);
+	}
+	public void setPrivateKey(Map<String, Object> listValue) throws IOException, JSONException {
+		this.privateKey = (String) JsonUtils.toJSON(listValue);
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> getListValue() {
+	public Map<String, Object> getPrivateKey() {
 		try {
-			return (Map<String, Object>) JsonUtils.toJSON(listValue);
+			return (Map<String, Object>) JsonUtils.toJSON(privateKey);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getPublicKey() {
+		try {
+			return (Map<String, Object>) JsonUtils.toJSON(publicKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -86,8 +111,10 @@ public class Configuration {
 			Configuration configuration = new Configuration();
 			configuration.setKey(CloudToPushType.valueOf(o
 					.getString("cloudpushtype")));
-			configuration.setListValue(JsonUtils.toMap(o
-					.getJSONObject("listValue")));
+			configuration.setPublicKey(JsonUtils.toMap(o
+					.getJSONObject("publicKey")));
+			configuration.setPrivateKey(JsonUtils.toMap(o
+					.getJSONObject("privateKey")));
 			return configuration;
 		} catch (JSONException e) {
 			return null;
@@ -96,7 +123,7 @@ public class Configuration {
 
 	@Override
 	public String toString() {
-		return "Configuration [key=" + key + ", listValue=" + listValue + "]";
+		return "Configuration [key=" + key + ", privateKey=" + privateKey + ", publicKey=" + publicKey + "]";
 	}
 
 }

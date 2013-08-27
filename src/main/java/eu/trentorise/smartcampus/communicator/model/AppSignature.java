@@ -21,26 +21,25 @@ public class AppSignature {
 
 	private String appId;
 
-	private String senderId;
+private Map<String,Object> privateKey;
+	
+	private Map<String,Object> publicKey;
 
-	private String apiKey;
-
-	public String getSenderId() {
-		return senderId;
+	public Map<String,Object> getPublicKey() {
+		return publicKey;
 	}
 
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
+	public void setPublicKey(Map<String,Object> publicKey) {
+		this.publicKey = publicKey;
 	}
 
-	public String getApiKey() {
-		return apiKey;
+	public Map<String,Object> getPrivateKey() {
+		return privateKey;
 	}
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
+	public void setPrivateKey(Map<String,Object> privateKey) {
+		this.privateKey = privateKey;
 	}
-
 	public String getAppId() {
 		return appId;
 	}
@@ -58,9 +57,11 @@ public class AppSignature {
 		try {
 			JSONObject o = new JSONObject(json);
 			AppSignature appSignature = new AppSignature();
-			appSignature.setApiKey(o.getString("apiKey"));
+			appSignature.setPrivateKey(JsonUtils.toMap(o
+					.getJSONObject("privateKey")));
 			appSignature.setAppId(o.getString("appId"));
-			appSignature.setSenderId(o.getString("senderId"));
+			appSignature.setPublicKey(JsonUtils.toMap(o
+					.getJSONObject("publicKey")));
 			
 			return appSignature;
 		} catch (JSONException e) {
@@ -70,14 +71,14 @@ public class AppSignature {
 
 	@Override
 	public String toString() {
-		return "Configuration [senderId=" + senderId + ", appid=" + appId+ ", apiKey=" + apiKey + "]";
+		return "Configuration [privateKey=" + privateKey + ", appid=" + appId+ ", publicKey=" + publicKey + "]";
 	}
 
 	public Map<String,Object> toMap() {
 		Map<String,Object> returnMap=new HashMap<String, Object>();
-		returnMap.put("apiKey", getApiKey());
+		returnMap.put("privateKey", getPrivateKey());
 		returnMap.put("appId", getAppId());
-		returnMap.put("senderId", getSenderId());
+		returnMap.put("publicKey", getPublicKey());
 		return returnMap;
 	}
 
