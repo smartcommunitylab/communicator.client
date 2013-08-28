@@ -61,7 +61,7 @@ public class TestClientApp {
 				ConstantsTest.APPID, ConstantsTest.CLIENT_AUTH_TOKEN));
 		
 		Map<String, Object> x = communicatorConnector
-				.requestAppConfigurationToPush(ConstantsTest.APPID, ConstantsTest.CLIENT_AUTH_TOKEN);
+				.requestPublicConfigurationToPush(ConstantsTest.APPID, ConstantsTest.USER_AUTH_TOKEN);
 		Assert.assertNotNull(x);
 		Assert.assertNotSame(0, x.size());
 		
@@ -87,7 +87,7 @@ public class TestClientApp {
 
 	
 
-		communicatorConnector.unregisterAppToPush(ConstantsTest.CLIENT_AUTH_TOKEN);
+		//communicatorConnector.unregisterAppToPush(ConstantsTest.CLIENT_AUTH_TOKEN);
 
 	
 

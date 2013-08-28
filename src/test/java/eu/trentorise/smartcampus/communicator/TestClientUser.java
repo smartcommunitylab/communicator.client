@@ -59,7 +59,7 @@ public class TestClientUser {
 		author.setUserId("1");
 		not.setAuthor(author);
 
-		communicatorConnector.sendUserNotification(users, not, ConstantsTest.USER_AUTH_TOKEN);
+		//communicatorConnector.sendUserNotification(users, not, ConstantsTest.USER_AUTH_TOKEN);
 		
 		Notifications results = communicatorConnector
 				.getNotificationsByUser(0L, 0, -1, ConstantsTest.USER_AUTH_TOKEN);

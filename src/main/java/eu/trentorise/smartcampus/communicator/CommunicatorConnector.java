@@ -42,108 +42,108 @@ public class CommunicatorConnector {
 			throw new Exception("Parameters not setted");
 		}
 	}
-
-	/**
-	 * Get notifications of the user
-	 * 
-	 * @param since
-	 *            since date, in milliseconds (use 0L for every time)
-	 * @param position
-	 *            position in the result set
-	 * @param count
-	 *            number of results (use -1L for all)
-	 * @param token
-	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
-	 */
-	// "/notification"
-	public Notifications getNotifications(Long since, Integer position,
-			Integer count, String token) throws CommunicatorConnectorException {
-		try {
-		
-			Map<String, Object> map = new TreeMap<String, Object>();
-			map.put("since", since);
-			map.put("position", position);
-			map.put("count", count);
-
-			String resp = RemoteConnector.getJSON(communicatorURL, Constants.NOTIFICATION, token,map);
-
-			
-			return Notifications.valueOf(resp);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new CommunicatorConnectorException(e);
-		}
-	}
-
-	/**
-	 * Get a notification by id
-	 * 
-	 * @param id
-	 *            a notification id
-	 * @param token
-	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
-	 */
-	// "/notification/{id}")
-	public Notification getNotification(String id, String token)
-			throws CommunicatorConnectorException {
-		try {
-			
-			String resp = RemoteConnector.getJSON(communicatorURL, Constants.NOTIFICATION + "/" + id, token);
-			
-
-			return Notification.valueOf(resp);
-		} catch (Exception e) {
-			throw new CommunicatorConnectorException(e);
-		}
-	}
-
-	/**
-	 * Update a notification (only starred and labelIds values are currently
-	 * updated)
-	 * 
-	 * @param notification
-	 *            a notification
-	 * @param id
-	 *            the id of the notification to update
-	 * @param token
-	 *            an authorization token
-	 * @throws CommunicatorConnectorException
-	 */
-	// /notification/{id}
-	public void updateNotification(Notification notification, String id,
-			String token) throws CommunicatorConnectorException {
-		try {
-		
-			RemoteConnector.putJSON(communicatorURL, Constants.NOTIFICATION + "/" + id,new JSONObject(notification.toMap()).toString(), token);
-		} catch (Exception e) {
-			throw new CommunicatorConnectorException(e);
-		}
-	}
-
-	/**
-	 * Delete a notification
-	 * 
-	 * @param id
-	 *            the id of the notification to delete
-	 * @param token
-	 *            an authorization token
-	 * @throws CommunicatorConnectorException
-	 */
-	// /notification/{id}
-	public void deleteNotification(String id, String token)
-			throws CommunicatorConnectorException {
-		try {
-
-			RemoteConnector.deleteJSON(communicatorURL, Constants.NOTIFICATION + "/" + id, token);
-	
-		} catch (Exception e) {
-			throw new CommunicatorConnectorException(e);
-		}
-	}
+//
+//	/**
+//	 * Get notifications of the user
+//	 * 
+//	 * @param since
+//	 *            since date, in milliseconds (use 0L for every time)
+//	 * @param position
+//	 *            position in the result set
+//	 * @param count
+//	 *            number of results (use -1L for all)
+//	 * @param token
+//	 *            an authorization token
+//	 * @return
+//	 * @throws CommunicatorConnectorException
+//	 */
+//	// "/notification"
+//	public Notifications getNotifications(Long since, Integer position,
+//			Integer count, String token) throws CommunicatorConnectorException {
+//		try {
+//		
+//			Map<String, Object> map = new TreeMap<String, Object>();
+//			map.put("since", since);
+//			map.put("position", position);
+//			map.put("count", count);
+//
+//			String resp = RemoteConnector.getJSON(communicatorURL, Constants.NOTIFICATION, token,map);
+//
+//			
+//			return Notifications.valueOf(resp);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new CommunicatorConnectorException(e);
+//		}
+//	}
+//
+//	/**
+//	 * Get a notification by id
+//	 * 
+//	 * @param id
+//	 *            a notification id
+//	 * @param token
+//	 *            an authorization token
+//	 * @return
+//	 * @throws CommunicatorConnectorException
+//	 */
+//	// "/notification/{id}")
+//	public Notification getNotification(String id, String token)
+//			throws CommunicatorConnectorException {
+//		try {
+//			
+//			String resp = RemoteConnector.getJSON(communicatorURL, Constants.NOTIFICATION + "/" + id, token);
+//			
+//
+//			return Notification.valueOf(resp);
+//		} catch (Exception e) {
+//			throw new CommunicatorConnectorException(e);
+//		}
+//	}
+//
+//	/**
+//	 * Update a notification (only starred and labelIds values are currently
+//	 * updated)
+//	 * 
+//	 * @param notification
+//	 *            a notification
+//	 * @param id
+//	 *            the id of the notification to update
+//	 * @param token
+//	 *            an authorization token
+//	 * @throws CommunicatorConnectorException
+//	 */
+//	// /notification/{id}
+//	public void updateNotification(Notification notification, String id,
+//			String token) throws CommunicatorConnectorException {
+//		try {
+//		
+//			RemoteConnector.putJSON(communicatorURL, Constants.NOTIFICATION + "/" + id,new JSONObject(notification.toMap()).toString(), token);
+//		} catch (Exception e) {
+//			throw new CommunicatorConnectorException(e);
+//		}
+//	}
+//
+//	/**
+//	 * Delete a notification
+//	 * 
+//	 * @param id
+//	 *            the id of the notification to delete
+//	 * @param token
+//	 *            an authorization token
+//	 * @throws CommunicatorConnectorException
+//	 */
+//	// /notification/{id}
+//	public void deleteNotification(String id, String token)
+//			throws CommunicatorConnectorException {
+//		try {
+//
+//			RemoteConnector.deleteJSON(communicatorURL, Constants.NOTIFICATION + "/" + id, token);
+//	
+//		} catch (Exception e) {
+//			throw new CommunicatorConnectorException(e);
+//		}
+//	}
 
 	// "/{capp}/notification")
 	public Notifications getNotificationsByApp(Long since,
@@ -396,20 +396,20 @@ public class CommunicatorConnector {
 	}
 
 	// /send/user")
-	public void sendUserNotification(List<String> users,
-			Notification notification, String token)
-			throws CommunicatorConnectorException {
-		try {
-			
-			Map<String, Object> map = new TreeMap<String, Object>();
-			map.put("users", users);
-
-			RemoteConnector.postJSON(communicatorURL, "send/user",new JSONObject(notification.toMap()).toString(), token,map);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new CommunicatorConnectorException(e);
-		}
-	}
+//	public void sendUserNotification(List<String> users,
+//			Notification notification, String token)
+//			throws CommunicatorConnectorException {
+//		try {
+//			
+//			Map<String, Object> map = new TreeMap<String, Object>();
+//			map.put("users", users);
+//
+//			RemoteConnector.postJSON(communicatorURL, "send/user",new JSONObject(notification.toMap()).toString(), token,map);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new CommunicatorConnectorException(e);
+//		}
+//	}
 
 	// /configuration/app/{appid}")
 	public Map<String, Object> requestAppConfigurationToPush(String appid,

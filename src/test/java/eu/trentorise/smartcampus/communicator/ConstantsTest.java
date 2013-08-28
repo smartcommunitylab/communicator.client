@@ -21,8 +21,8 @@ package eu.trentorise.smartcampus.communicator;
  */
 public class ConstantsTest {
 
-	static final String USER_AUTH_TOKEN = "8c10ca03-a20b-43d6-a6a0-4348e881acef";
-	static final String CLIENT_AUTH_TOKEN = "64ad5a0a-c36e-4fbb-9c22-78bf47abfecb";
+	static final String USER_AUTH_TOKEN = "9dae1cd7-e7e9-45db-ab8a-681e1020540e";
+	static final String CLIENT_AUTH_TOKEN = "9815fe45-6aa6-4b81-857d-17605844e411";
 
 	// static final String BASIC_PROFILE_SRV_URL =
 	// "https://vas-dev.smartcampuslab.it/aac";
