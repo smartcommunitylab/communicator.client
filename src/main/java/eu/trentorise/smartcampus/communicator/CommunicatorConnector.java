@@ -33,7 +33,7 @@ public class CommunicatorConnector {
 	 */
 	public CommunicatorConnector(String serverURL, String appId)
 			throws Exception {
-		if (serverURL != null || serverURL.compareTo("") != 0) {
+		if (serverURL != null && serverURL.compareTo("") != 0) {
 			this.communicatorURL = serverURL;
 			if (!communicatorURL.endsWith("/"))
 				communicatorURL += '/';
