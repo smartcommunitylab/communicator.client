@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 @XmlRootElement(name = "usersignature")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -35,12 +34,11 @@ public class UserSignature {
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
 	}
-	
 
 	/**
 	 * @param json
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws JSONException
 	 */
 	public static UserSignature valueOf(String json) throws IOException {
@@ -49,7 +47,7 @@ public class UserSignature {
 			UserSignature userSignature = new UserSignature();
 			userSignature.setAppName(o.getString("appName"));
 			userSignature.setRegistrationId(o.getString("registrationId"));
-			
+
 			return userSignature;
 		} catch (JSONException e) {
 			return null;
@@ -58,14 +56,15 @@ public class UserSignature {
 
 	@Override
 	public String toString() {
-		return "UserSignature [appname=" + appName + ", registrationId=" + registrationId+  "]";
+		return "UserSignature [appname=" + appName + ", registrationId="
+				+ registrationId + "]";
 	}
 
-	public Map<Object,Object>  toMap() {
-		Map<Object,Object> returnMap=new TreeMap<Object, Object>();
+	public Map<Object, Object> toMap() {
+		Map<Object, Object> returnMap = new TreeMap<Object, Object>();
 		returnMap.put("appName", getAppName());
 		returnMap.put("registrationId", getRegistrationId());
-		
+
 		return returnMap;
 	}
 

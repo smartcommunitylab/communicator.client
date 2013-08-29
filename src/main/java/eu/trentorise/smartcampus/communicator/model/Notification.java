@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import eu.trentorise.smartcampus.network.JsonUtils;
 
@@ -183,23 +182,24 @@ public class Notification {
 	public void setAuthor(NotificationAuthor author) {
 		this.author = author;
 	}
-	
+
 	/**
 	 * @param json
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	@SuppressWarnings("unchecked")
-	public static Notification valueOf(String json)  {
+	public static Notification valueOf(String json) {
 		try {
 			JSONObject o = new JSONObject(json);
 			Notification notification = new Notification();
-			notification.setAuthor(NotificationAuthor.valueOf(o.getString("author")));
-			
+			notification.setAuthor(NotificationAuthor.valueOf(o
+					.getString("author")));
+
 			notification.setDescription(o.getString("description"));
-			
+
 			notification.setId(o.getString("id"));
-			
+
 			notification.setReaded(o.getBoolean("readed"));
 			notification.setStarred(o.getBoolean("starred"));
 			notification.setTimestamp(o.getLong("timestamp"));
@@ -208,36 +208,40 @@ public class Notification {
 			notification.setUpdateTime(o.getLong("updateTime"));
 			notification.setUser(o.getString("user"));
 			notification.setVersion(o.getLong("version"));
-			if(!o.isNull("channelIds"))
-				notification.setChannelIds(JsonUtils.toList(o.getJSONArray("channelIds")));
-			if(!o.isNull("content"))
-				notification.setContent(JsonUtils.toMap(o.getJSONObject("content")));
-			if(!o.isNull("entities"))
-				notification.setEntities(JsonUtils.toList(o.getJSONArray("entities")));
-			if(!o.isNull("labelIds"))
-				notification.setLabelIds(JsonUtils.toList(o.getJSONArray("labelIds")));
-			
-			
+			if (!o.isNull("channelIds"))
+				notification.setChannelIds(JsonUtils.toList(o
+						.getJSONArray("channelIds")));
+			if (!o.isNull("content"))
+				notification.setContent(JsonUtils.toMap(o
+						.getJSONObject("content")));
+			if (!o.isNull("entities"))
+				notification.setEntities(JsonUtils.toList(o
+						.getJSONArray("entities")));
+			if (!o.isNull("labelIds"))
+				notification.setLabelIds(JsonUtils.toList(o
+						.getJSONArray("labelIds")));
+
 			return notification;
 		} catch (JSONException e) {
 			return null;
 		}
 	}
 
-
 	@Override
 	public String toString() {
-		return "Notification [author="+ author + ",channelIds=" +channelIds+",content=" +content+
-				",description="+description +",entities="+entities +",id="+id +
-				",labelIds="+labelIds +",readed="+readed +",starred="+starred +",timestamp="+timestamp +
-				",title="+title +",type=" +type+",updateTime="+updateTime +",user="+user+",version="+version +"]";
+		return "Notification [author=" + author + ",channelIds=" + channelIds
+				+ ",content=" + content + ",description=" + description
+				+ ",entities=" + entities + ",id=" + id + ",labelIds="
+				+ labelIds + ",readed=" + readed + ",starred=" + starred
+				+ ",timestamp=" + timestamp + ",title=" + title + ",type="
+				+ type + ",updateTime=" + updateTime + ",user=" + user
+				+ ",version=" + version + "]";
 	}
 
-	
-	public Map<String,Object> toMap() {
+	public Map<String, Object> toMap() {
 		// TODO Auto-generated method stub
-		
-		Map<String,Object> map= new HashMap<String, Object>();
+
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", getId());
 		map.put("content", getContent());
 		map.put("channelIds", getChannelIds());
@@ -253,9 +257,8 @@ public class Notification {
 		map.put("description", getDescription());
 		map.put("readed", isReaded());
 		map.put("author", getAuthor().toMap());
-		
+
 		return map;
 	}
-	
 
 }

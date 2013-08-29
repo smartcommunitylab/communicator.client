@@ -32,8 +32,7 @@ public class ConstantsTest {
 	// "https://vas-dev.smartcampuslab.it/socialservice";
 
 	static final String BASIC_PROFILE_SRV_URL = "http://localhost:8080/permission.provider";
-	static final String COMMUNICATOR_SRV_URL = "http://localhost:8081/smartcampus.communicator/";
-	static final String APPID = "sad";
-
+	static final String COMMUNICATOR_SRV_URL = "https://vas-dev.smartcampuslab.it/core.communicator/";
+	static final String APPID = "studymate";
 
 }

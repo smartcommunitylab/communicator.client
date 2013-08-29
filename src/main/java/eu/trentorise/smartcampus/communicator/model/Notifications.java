@@ -52,7 +52,8 @@ public class Notifications {
 			JSONArray arr = o.getJSONArray("notifications");
 			if (arr != null)
 				for (int i = 0; i < arr.length(); i++) {
-					Notification index=Notification.valueOf(arr.getJSONObject(i).toString());
+					Notification index = Notification.valueOf(arr
+							.getJSONObject(i).toString());
 					profile.getNotifications().add(index);
 				}
 			return profile;
@@ -60,5 +61,5 @@ public class Notifications {
 			return null;
 		}
 	}
-	
+
 }

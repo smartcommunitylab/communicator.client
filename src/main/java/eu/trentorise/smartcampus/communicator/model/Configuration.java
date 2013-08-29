@@ -23,7 +23,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,7 +48,7 @@ public class Configuration {
 	public Configuration() {
 
 	}
-	
+
 	public Configuration(CloudToPushType key, Map<String, Object> privateKey,
 			Map<String, Object> publicKey) throws JSONException, IOException {
 		this.setKey(key);
@@ -58,11 +57,10 @@ public class Configuration {
 	}
 
 	public Configuration(CloudToPushType key, Map<String, Object> privateKey)
-			throws  JSONException, IOException {
+			throws JSONException, IOException {
 		this.setKey(key);
 		this.setPrivateKey(privateKey);
 	}
-
 
 	public CloudToPushType getKey() {
 		return key;
@@ -72,10 +70,13 @@ public class Configuration {
 		this.key = key;
 	}
 
-	public void setPublicKey(Map<String, Object> listValue) throws IOException, JSONException {
+	public void setPublicKey(Map<String, Object> listValue) throws IOException,
+			JSONException {
 		this.publicKey = (String) JsonUtils.toJSON(listValue);
 	}
-	public void setPrivateKey(Map<String, Object> listValue) throws IOException, JSONException {
+
+	public void setPrivateKey(Map<String, Object> listValue)
+			throws IOException, JSONException {
 		this.privateKey = (String) JsonUtils.toJSON(listValue);
 	}
 
@@ -88,7 +89,7 @@ public class Configuration {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getPublicKey() {
 		try {
@@ -102,7 +103,7 @@ public class Configuration {
 	/**
 	 * @param json
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws JSONException
 	 */
 	public static Configuration valueOf(String json) throws IOException {
@@ -123,7 +124,8 @@ public class Configuration {
 
 	@Override
 	public String toString() {
-		return "Configuration [key=" + key + ", privateKey=" + privateKey + ", publicKey=" + publicKey + "]";
+		return "Configuration [key=" + key + ", privateKey=" + privateKey
+				+ ", publicKey=" + publicKey + "]";
 	}
 
 }

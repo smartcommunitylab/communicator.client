@@ -1,9 +1,7 @@
 package eu.trentorise.smartcampus.communicator.model;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import eu.trentorise.smartcampus.network.JsonUtils;
 
@@ -21,25 +18,26 @@ public class AppSignature {
 
 	private String appId;
 
-private Map<String,Object> privateKey;
-	
-	private Map<String,Object> publicKey;
+	private Map<String, Object> privateKey;
 
-	public Map<String,Object> getPublicKey() {
+	private Map<String, Object> publicKey;
+
+	public Map<String, Object> getPublicKey() {
 		return publicKey;
 	}
 
-	public void setPublicKey(Map<String,Object> publicKey) {
+	public void setPublicKey(Map<String, Object> publicKey) {
 		this.publicKey = publicKey;
 	}
 
-	public Map<String,Object> getPrivateKey() {
+	public Map<String, Object> getPrivateKey() {
 		return privateKey;
 	}
 
-	public void setPrivateKey(Map<String,Object> privateKey) {
+	public void setPrivateKey(Map<String, Object> privateKey) {
 		this.privateKey = privateKey;
 	}
+
 	public String getAppId() {
 		return appId;
 	}
@@ -47,13 +45,12 @@ private Map<String,Object> privateKey;
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
-	
+
 	/**
 	 * @param json
 	 * @return
-	
 	 */
-	public static AppSignature valueOf(String json)  {
+	public static AppSignature valueOf(String json) {
 		try {
 			JSONObject o = new JSONObject(json);
 			AppSignature appSignature = new AppSignature();
@@ -62,7 +59,7 @@ private Map<String,Object> privateKey;
 			appSignature.setAppId(o.getString("appId"));
 			appSignature.setPublicKey(JsonUtils.toMap(o
 					.getJSONObject("publicKey")));
-			
+
 			return appSignature;
 		} catch (JSONException e) {
 			return null;
@@ -71,11 +68,12 @@ private Map<String,Object> privateKey;
 
 	@Override
 	public String toString() {
-		return "Configuration [privateKey=" + privateKey + ", appid=" + appId+ ", publicKey=" + publicKey + "]";
+		return "Configuration [privateKey=" + privateKey + ", appid=" + appId
+				+ ", publicKey=" + publicKey + "]";
 	}
 
-	public Map<String,Object> toMap() {
-		Map<String,Object> returnMap=new HashMap<String, Object>();
+	public Map<String, Object> toMap() {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
 		returnMap.put("privateKey", getPrivateKey());
 		returnMap.put("appId", getAppId());
 		returnMap.put("publicKey", getPublicKey());

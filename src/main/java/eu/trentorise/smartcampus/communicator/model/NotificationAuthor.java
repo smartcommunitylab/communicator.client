@@ -43,13 +43,13 @@ public class NotificationAuthor implements Serializable {
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
-	
+
 	/**
 	 * @param json
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
-	public static NotificationAuthor valueOf(String json)  {
+	public static NotificationAuthor valueOf(String json) {
 		try {
 			JSONObject o = new JSONObject(json);
 			NotificationAuthor notificationAuthor = new NotificationAuthor();
@@ -63,15 +63,15 @@ public class NotificationAuthor implements Serializable {
 
 	@Override
 	public String toString() {
-		return "NotificationAuthor [ appId=" + appId + ", userId=" + userId + "]";
+		return "NotificationAuthor [ appId=" + appId + ", userId=" + userId
+				+ "]";
 	}
 
-	public Map<String,Object> toMap() {
-		Map<String,Object> map= new HashMap<String, Object>();
+	public Map<String, Object> toMap() {
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("appId", getAppId());
 		map.put("userId", getUserId());
 		return map;
 	}
-	
 
 }
