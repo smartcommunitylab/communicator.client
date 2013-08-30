@@ -40,26 +40,26 @@ public class Notifications {
 		this.notifications = notifications;
 	}
 
-	/**
-	 * @param json
-	 * @return
-	 */
-	public static Notifications valueOf(String json) {
-		try {
-			JSONObject o = new JSONObject(json);
-			Notifications profile = new Notifications();
-			profile.setNotifications(new ArrayList<Notification>());
-			JSONArray arr = o.getJSONArray("notifications");
-			if (arr != null)
-				for (int i = 0; i < arr.length(); i++) {
-					Notification index = Notification.valueOf(arr
-							.getJSONObject(i).toString());
-					profile.getNotifications().add(index);
-				}
-			return profile;
-		} catch (JSONException e) {
-			return null;
-		}
-	}
+//	/**
+//	 * @param json
+//	 * @return
+//	 */
+//	public static Notifications valueOf(String json) {
+//		try {
+//			JSONObject o = new JSONObject(json);
+//			Notifications profile = new Notifications();
+//			profile.setNotifications(new ArrayList<Notification>());
+//			JSONArray arr = o.getJSONArray("notifications");
+//			if (arr != null)
+//				for (int i = 0; i < arr.length(); i++) {
+//					Notification index = Notification.valueOf(arr
+//							.getJSONObject(i).toString());
+//					profile.getNotifications().add(index);
+//				}
+//			return profile;
+//		} catch (JSONException e) {
+//			return null;
+//		}
+//	}
 
 }

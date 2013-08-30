@@ -83,7 +83,7 @@ public class Configuration {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getPrivateKey() {
 		try {
-			return (Map<String, Object>) JsonUtils.toJSON(privateKey);
+			return (Map<String, Object>) JsonUtils.toObject(privateKey,Map.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -93,34 +93,34 @@ public class Configuration {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getPublicKey() {
 		try {
-			return (Map<String, Object>) JsonUtils.toJSON(publicKey);
+			return (Map<String, Object>) JsonUtils.toObject(publicKey, Map.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	/**
-	 * @param json
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-	public static Configuration valueOf(String json) throws IOException {
-		try {
-			JSONObject o = new JSONObject(json);
-			Configuration configuration = new Configuration();
-			configuration.setKey(CloudToPushType.valueOf(o
-					.getString("cloudpushtype")));
-			configuration.setPublicKey(JsonUtils.toMap(o
-					.getJSONObject("publicKey")));
-			configuration.setPrivateKey(JsonUtils.toMap(o
-					.getJSONObject("privateKey")));
-			return configuration;
-		} catch (JSONException e) {
-			return null;
-		}
-	}
+//	/**
+//	 * @param json
+//	 * @return
+//	 * @throws IOException
+//	 * @throws JSONException
+//	 */
+//	public static Configuration valueOf(String json) throws IOException {
+//		try {
+//			JSONObject o = new JSONObject(json);
+//			Configuration configuration = new Configuration();
+//			configuration.setKey(CloudToPushType.valueOf(o
+//					.getString("cloudpushtype")));
+//			configuration.setPublicKey(JsonUtils.toMap(o
+//					.getJSONObject("publicKey")));
+//			configuration.setPrivateKey(JsonUtils.toMap(o
+//					.getJSONObject("privateKey")));
+//			return configuration;
+//		} catch (JSONException e) {
+//			return null;
+//		}
+//	}
 
 	@Override
 	public String toString() {

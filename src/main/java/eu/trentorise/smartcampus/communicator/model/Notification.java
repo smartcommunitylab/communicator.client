@@ -183,49 +183,49 @@ public class Notification {
 		this.author = author;
 	}
 
-	/**
-	 * @param json
-	 * @return
-	 * @throws JSONException
-	 */
-	@SuppressWarnings("unchecked")
-	public static Notification valueOf(String json) {
-		try {
-			JSONObject o = new JSONObject(json);
-			Notification notification = new Notification();
-			notification.setAuthor(NotificationAuthor.valueOf(o
-					.getString("author")));
-
-			notification.setDescription(o.getString("description"));
-
-			notification.setId(o.getString("id"));
-
-			notification.setReaded(o.getBoolean("readed"));
-			notification.setStarred(o.getBoolean("starred"));
-			notification.setTimestamp(o.getLong("timestamp"));
-			notification.setTitle(o.getString("title"));
-			notification.setType(o.getString("type"));
-			notification.setUpdateTime(o.getLong("updateTime"));
-			notification.setUser(o.getString("user"));
-			notification.setVersion(o.getLong("version"));
-			if (!o.isNull("channelIds"))
-				notification.setChannelIds(JsonUtils.toList(o
-						.getJSONArray("channelIds")));
-			if (!o.isNull("content"))
-				notification.setContent(JsonUtils.toMap(o
-						.getJSONObject("content")));
-			if (!o.isNull("entities"))
-				notification.setEntities(JsonUtils.toList(o
-						.getJSONArray("entities")));
-			if (!o.isNull("labelIds"))
-				notification.setLabelIds(JsonUtils.toList(o
-						.getJSONArray("labelIds")));
-
-			return notification;
-		} catch (JSONException e) {
-			return null;
-		}
-	}
+//	/**
+//	 * @param json
+//	 * @return
+//	 * @throws JSONException
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public static Notification valueOf(String json) {
+//		try {
+//			JSONObject o = new JSONObject(json);
+//			Notification notification = new Notification();
+//			notification.setAuthor(NotificationAuthor.valueOf(o
+//					.getString("author")));
+//
+//			notification.setDescription(o.getString("description"));
+//
+//			notification.setId(o.getString("id"));
+//
+//			notification.setReaded(o.getBoolean("readed"));
+//			notification.setStarred(o.getBoolean("starred"));
+//			notification.setTimestamp(o.getLong("timestamp"));
+//			notification.setTitle(o.getString("title"));
+//			notification.setType(o.getString("type"));
+//			notification.setUpdateTime(o.getLong("updateTime"));
+//			notification.setUser(o.getString("user"));
+//			notification.setVersion(o.getLong("version"));
+//			if (!o.isNull("channelIds"))
+//				notification.setChannelIds(JsonUtils.toList(o
+//						.getJSONArray("channelIds")));
+//			if (!o.isNull("content"))
+//				notification.setContent(JsonUtils.toMap(o
+//						.getJSONObject("content")));
+//			if (!o.isNull("entities"))
+//				notification.setEntities(JsonUtils.toList(o
+//						.getJSONArray("entities")));
+//			if (!o.isNull("labelIds"))
+//				notification.setLabelIds(JsonUtils.toList(o
+//						.getJSONArray("labelIds")));
+//
+//			return notification;
+//		} catch (JSONException e) {
+//			return null;
+//		}
+//	}
 
 	@Override
 	public String toString() {

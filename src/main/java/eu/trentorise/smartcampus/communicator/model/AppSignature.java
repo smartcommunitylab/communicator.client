@@ -46,25 +46,25 @@ public class AppSignature {
 		this.appId = appId;
 	}
 
-	/**
-	 * @param json
-	 * @return
-	 */
-	public static AppSignature valueOf(String json) {
-		try {
-			JSONObject o = new JSONObject(json);
-			AppSignature appSignature = new AppSignature();
-			appSignature.setPrivateKey(JsonUtils.toMap(o
-					.getJSONObject("privateKey")));
-			appSignature.setAppId(o.getString("appId"));
-			appSignature.setPublicKey(JsonUtils.toMap(o
-					.getJSONObject("publicKey")));
-
-			return appSignature;
-		} catch (JSONException e) {
-			return null;
-		}
-	}
+//	/**
+//	 * @param json
+//	 * @return
+//	 */
+//	public static AppSignature valueOf(String json) {
+//		try {
+//			JSONObject o = new JSONObject(json);
+//			AppSignature appSignature = new AppSignature();
+//			appSignature.setPrivateKey(JsonUtils.toO(o
+//					.getJSONObject("privateKey")));
+//			appSignature.setAppId(o.getString("appId"));
+//			appSignature.setPublicKey(JsonUtils.toMap(o
+//					.getJSONObject("publicKey")));
+//
+//			return appSignature;
+//		} catch (JSONException e) {
+//			return null;
+//		}
+//	}
 
 	@Override
 	public String toString() {

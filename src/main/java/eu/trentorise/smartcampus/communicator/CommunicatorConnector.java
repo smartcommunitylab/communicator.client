@@ -71,7 +71,7 @@ public class CommunicatorConnector {
 					Constants.BYAPP + appId + "/" + Constants.NOTIFICATION,
 					token, map);
 
-			return Notifications.valueOf(resp);
+			return JsonUtils.toObject(resp, Notifications.class);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -96,7 +96,7 @@ public class CommunicatorConnector {
 					Constants.BYAPP + appId + "/" + Constants.NOTIFICATION
 							+ "/" + id, token);
 
-			return Notification.valueOf(resp);
+			return JsonUtils.toObject(resp, Notification.class);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -120,8 +120,7 @@ public class CommunicatorConnector {
 		try {
 
 			RemoteConnector.putJSON(communicatorURL, Constants.BYAPP + appId
-					+ "/" + Constants.NOTIFICATION + "/" + id, new JSONObject(
-					notification).toString(), token);
+					+ "/" + Constants.NOTIFICATION + "/" + id, JsonUtils.toJSON(notification), token);
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
@@ -177,7 +176,7 @@ public class CommunicatorConnector {
 			String resp = RemoteConnector.getJSON(communicatorURL,
 					Constants.BYUSER + Constants.NOTIFICATION, token, map);
 
-			return Notifications.valueOf(resp);
+			return JsonUtils.toObject(resp, Notifications.class);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -202,7 +201,7 @@ public class CommunicatorConnector {
 					.getJSON(communicatorURL, Constants.BYUSER
 							+ Constants.NOTIFICATION + "/" + id, token);
 
-			return Notification.valueOf(resp);
+			return JsonUtils.toObject(resp, Notification.class);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -226,8 +225,7 @@ public class CommunicatorConnector {
 		try {
 
 			RemoteConnector.putJSON(communicatorURL, Constants.BYUSER
-					+ Constants.NOTIFICATION + "/" + id, new JSONObject(
-					notification.toMap()).toString(), token);
+					+ Constants.NOTIFICATION + "/" + id, JsonUtils.toJSON(notification), token);
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
 		}
@@ -277,7 +275,7 @@ public class CommunicatorConnector {
 
 			RemoteConnector.postJSON(communicatorURL, "register/"
 					+ Constants.BYAPP + appid,
-					new JSONObject(signature.toMap()).toString(), token);
+					JsonUtils.toJSON(signature), token);
 
 			return true;
 		} catch (Exception e) {
@@ -305,10 +303,12 @@ public class CommunicatorConnector {
 			String token) throws CommunicatorConnectorException {
 		try {
 
+//			RemoteConnector.postJSON(communicatorURL, "register/"
+//					+ Constants.BYUSER + appid,
+//					new JSONObject(signature.toMap()).toString(), token);
 			RemoteConnector.postJSON(communicatorURL, "register/"
 					+ Constants.BYUSER + appid,
-					new JSONObject(signature.toMap()).toString(), token);
-
+					JsonUtils.toJSON(signature), token);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -387,11 +387,18 @@ public class CommunicatorConnector {
 			Map<String, Object> map = new TreeMap<String, Object>();
 			map.put("users", users);
 
+//			RemoteConnector
+//					.postJSON(communicatorURL, "send/app/" + appId,
+//							new JSONObject(notification.toMap()).toString(),
+//							token, map);
+			
 			RemoteConnector
-					.postJSON(communicatorURL, "send/app/" + appId,
-							new JSONObject(notification.toMap()).toString(),
-							token, map);
+			.postJSON(communicatorURL, "send/app/" + appId,JsonUtils.toJSON(notification),
+					token, map);
 
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new CommunicatorConnectorException(e);
@@ -433,7 +440,7 @@ public class CommunicatorConnector {
 			String resp = RemoteConnector.getJSON(communicatorURL,
 					"configuration/" + Constants.BYAPP + appid, token);
 
-			return JsonUtils.toMap(new JSONObject(resp));
+			return JsonUtils.toObject(resp,Map.class);
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
@@ -458,7 +465,7 @@ public class CommunicatorConnector {
 			String resp = RemoteConnector.getJSON(communicatorURL,
 					"configuration/" + Constants.BYUSER + appid, token);
 
-			return JsonUtils.toMap(new JSONObject(resp));
+			return JsonUtils.toObject(resp,Map.class);
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
@@ -484,7 +491,7 @@ public class CommunicatorConnector {
 			String resp = RemoteConnector.getJSON(communicatorURL,
 					"configuration/public/" + appid, token);
 
-			return JsonUtils.toMap(new JSONObject(resp));
+			return JsonUtils.toObject(resp,Map.class);
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
