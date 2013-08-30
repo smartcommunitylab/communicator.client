@@ -15,12 +15,7 @@
  ******************************************************************************/
 package eu.trentorise.smartcampus.communicator.model;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Class representing a notification
