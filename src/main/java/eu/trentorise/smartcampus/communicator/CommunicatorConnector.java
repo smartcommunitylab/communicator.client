@@ -433,14 +433,14 @@ public class CommunicatorConnector {
 	 *            an authorization token
 	 * @throws CommunicatorConnectorException
 	 */
-	public Map<String, Object> requestAppConfigurationToPush(String appid,
+	public AppSignature requestAppConfigurationToPush(String appid,
 			String token) throws CommunicatorConnectorException {
 		try {
 
 			String resp = RemoteConnector.getJSON(communicatorURL,
 					"configuration/" + Constants.BYAPP + appid, token);
 
-			return JsonUtils.toObject(resp,Map.class);
+			return JsonUtils.toObject(resp,AppSignature.class);
 
 		} catch (Exception e) {
 			throw new CommunicatorConnectorException(e);
