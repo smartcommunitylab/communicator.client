@@ -19,12 +19,7 @@ package eu.trentorise.smartcampus.communicator.model;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import eu.trentorise.smartcampus.network.JsonUtils;
 
@@ -35,8 +30,6 @@ import eu.trentorise.smartcampus.network.JsonUtils;
  * @author mirko perillo
  * 
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration {
 
 	private CloudToPushType key;
