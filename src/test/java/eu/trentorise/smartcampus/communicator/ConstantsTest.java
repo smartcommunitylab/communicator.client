@@ -20,19 +20,23 @@ package eu.trentorise.smartcampus.communicator;
  * 
  */
 public class ConstantsTest {
+//	
+	static final String USER_AUTH_TOKEN = "17f1a195-53eb-4719-b607-c7a6dec3d2a9";
+	static final String CLIENT_AUTH_TOKEN = "1ec2d449-6e9a-452e-96cb-7a6725711913";
 
-	static final String USER_AUTH_TOKEN = "248b8ddf-4da3-438d-b489-00c9dd21fde7";
-	static final String CLIENT_AUTH_TOKEN = "71395d00-c23e-4181-8f43-6281a8c0887e";
 
-	// static final String BASIC_PROFILE_SRV_URL =
-	// "https://vas-dev.smartcampuslab.it/aac";
-	// static final String PROFILE_SRV_URL =
-	// "https://vas-dev.smartcampuslab.it/profileservice";
-	// static final String SOCIAL_SRV_URL =
-	// "https://vas-dev.smartcampuslab.it/socialservice";
 
-	static final String BASIC_PROFILE_SRV_URL = "http://localhost:8080/permission.provider";
-	static final String COMMUNICATOR_SRV_URL = "http://localhost:8081/smartcampus.communicator/";
-	static final String APPID = "test2";
+	static final String BASIC_PROFILE_SRV_URL = "https://vas-dev.smartcampuslab.it/";
+	static final String COMMUNICATOR_SRV_URL = "https://vas-dev.smartcampuslab.it/core.communicator/";
+	static final String APPID = "testcommunicator";
+
+//	static final String USER_AUTH_TOKEN = "dedfa267-4adc-4b34-9740-16e9ec0636fc";
+//	static final String CLIENT_AUTH_TOKEN = "98a05b9a-f240-4dac-86e2-af5778e30af4";
+//
+//	
+//
+//	static final String BASIC_PROFILE_SRV_URL = "http://localhost:8080/permission.provider";
+//	static final String COMMUNICATOR_SRV_URL = "http://localhost:8080/core.communicator/";
+//	static final String APPID = "astro";
 
 }

@@ -23,9 +23,9 @@ public class TestClientUser {
 		communicatorConnector = new CommunicatorConnector(
 				ConstantsTest.COMMUNICATOR_SRV_URL, ConstantsTest.APPID);
 	}
-
+	
 	@Test
-	public void allTest() throws CommunicatorConnectorException {
+	public void TestReg() throws CommunicatorConnectorException {
 
 		UserSignature signature = new UserSignature();
 		signature.setRegistrationId("blabla");
@@ -33,6 +33,12 @@ public class TestClientUser {
 
 		Assert.assertTrue(communicatorConnector.registerUserToPush(signature,
 				ConstantsTest.APPID, ConstantsTest.USER_AUTH_TOKEN));
+	}
+	
+	@Test
+	public void TestGetConf() throws CommunicatorConnectorException {
+
+		
 
 		Map<String, Object> x = communicatorConnector
 				.requestUserConfigurationToPush(ConstantsTest.APPID,
@@ -40,26 +46,42 @@ public class TestClientUser {
 
 		Assert.assertNotNull(x);
 		Assert.assertNotSame(0, x.size());
+	}
+	
+	@Test
+	public void TestSend() throws CommunicatorConnectorException {
 
-		List<String> users = new ArrayList<String>();
-		users.add("39");
-		users.add("40");
+	
+//
+//		List<String> users = new ArrayList<String>();
+//		users.add("39");
+//		users.add("40");
+//
+//		Notification not = new Notification();
+//		not.setDescription("Check in update e delete");
+//		not.setTitle("Check in update e delete");
+//		not.setType(ConstantsTest.APPID);
+//		not.setUser("1");
+//		not.setId(null);
+//		NotificationAuthor author = new NotificationAuthor();
+//		author.setUserId("1");
+//		not.setAuthor(author);
+//
+//		 communicatorConnector.sendUserNotification(users, not,
+//		 ConstantsTest.USER_AUTH_TOKEN);
+	}
 
-		Notification not = new Notification();
-		not.setDescription("Check in update e delete");
-		not.setTitle("Check in update e delete");
-		not.setType(ConstantsTest.APPID);
-		not.setUser("1");
-		not.setId(null);
-		NotificationAuthor author = new NotificationAuthor();
-		author.setUserId("1");
-		not.setAuthor(author);
+	@Test
+	public void TestGetUpdateDelete() throws CommunicatorConnectorException {
 
-		// communicatorConnector.sendUserNotification(users, not,
-		// ConstantsTest.USER_AUTH_TOKEN);
+	
+
+	
 
 		Notifications results = communicatorConnector.getNotificationsByUser(
 				0L, 0, -1, ConstantsTest.USER_AUTH_TOKEN);
+		Assert.assertNotNull(results);
+		Assert.assertNotSame(0, results.getNotifications().size());
 
 		Notification notification = results.getNotifications().get(0);
 		notification = communicatorConnector.getNotificationByUser(
@@ -77,106 +99,5 @@ public class TestClientUser {
 				ConstantsTest.USER_AUTH_TOKEN);
 	}
 
-	//
-	// // /send/user")
-	// @Test
-	// public void sendUserNotification() throws CommunicatorConnectorException
-	// {
-	// List<String> users = new ArrayList<String>();
-	// users.add("39");
-	// users.add("40");
-	//
-	// Notification not = new Notification();
-	// not.setDescription("Check in update e delete");
-	// not.setTitle("Check in update e delete");
-	// not.setType(ConstantsTest.APPID);
-	// not.setUser("1");
-	// not.setId(null);
-	// NotificationAuthor author = new NotificationAuthor();
-	// author.setUserId("1");
-	// not.setAuthor(author);
-	//
-	// communicatorConnector.sendUserNotification(users, not,
-	// ConstantsTest.USER_AUTH_TOKEN);
-	// }
-	//
-	// // "/register/user/{appid}")
-	// @Test
-	// public void registerUser() throws CommunicatorConnectorException {
-	// UserSignature signature = new UserSignature();
-	// signature.setRegistrationId("blabla");
-	// signature.setAppName(ConstantsTest.APPID);
-	//
-	// Assert.assertTrue(communicatorConnector.registerUserToPush(ConstantsTest.APPID,
-	// signature, ConstantsTest.USER_AUTH_TOKEN));
-	//
-	// }
-	//
-	// // /configuration/user/{appid}")
-	// @Test
-	// public void requestUserConfigurationToPush()
-	// throws CommunicatorConnectorException {
-	// Map<String, Object> x = communicatorConnector
-	// .requestUserConfigurationToPush(ConstantsTest.APPID,
-	// ConstantsTest.USER_AUTH_TOKEN);
-	//
-	// Assert.assertNotNull(x);
-	// Assert.assertNotSame(0, x.size());
-	// }
-	//
-	// // /user/notification
-	// @Test
-	// public void getNotificationsByUser() throws
-	// CommunicatorConnectorException {
-	// Notifications results = communicatorConnector
-	// .getNotificationsByUser(0L, 0, -1, ConstantsTest.USER_AUTH_TOKEN);
-	// Assert.assertNotNull(results);
-	// Assert.assertNotSame(0, results.getNotifications().size());
-	// }
-	//
-	// // /{user/notification/{id}
-	// @Test
-	// public void getNotificationByUser() throws CommunicatorConnectorException
-	// {
-	// Notifications results = communicatorConnector
-	// .getNotificationsByUser(0L, 0, -1, ConstantsTest.USER_AUTH_TOKEN);
-	//
-	// Notification notification = results.getNotifications().get(0);
-	// notification = communicatorConnector.getNotificationByUser(
-	// notification.getId(), ConstantsTest.USER_AUTH_TOKEN);
-	// Assert.assertNotNull(notification.getId());
-	// }
-	//
-	// // /user/notification/{id}
-	// @Test
-	// public void updateByUser() throws CommunicatorConnectorException {
-	// Notifications results = communicatorConnector
-	// .getNotificationsByUser(0L, 0, -1, ConstantsTest.USER_AUTH_TOKEN);
-	//
-	// Notification notification = results.getNotifications().get(0);
-	// notification.setStarred(true);
-	// communicatorConnector.updateByUser(notification, notification.getId(),
-	// ConstantsTest.USER_AUTH_TOKEN);
-	// }
-	//
-	// // //user/notification/{id}
-	// @Test
-	// public void deleteByUser() throws CommunicatorConnectorException {
-	// Notifications results = communicatorConnector
-	// .getNotificationsByUser(0L, 0, -1, ConstantsTest.USER_AUTH_TOKEN);
-	//
-	// Notification notification = results.getNotifications().get(0);
-	//
-	// communicatorConnector.deleteByUser(notification.getId(),
-	// ConstantsTest.USER_AUTH_TOKEN);
-	// }
-	//
-	// // /unregister/user/{appId}/{userid}")
-	// @Test
-	// public void unregisterUserToPush() throws CommunicatorConnectorException
-	// {
-	// communicatorConnector.unregisterUserToPush("1",
-	// ConstantsTest.USER_AUTH_TOKEN);
-	// }
 
 }
