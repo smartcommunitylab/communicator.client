@@ -15,13 +15,18 @@
  */
 package eu.trentorise.smartcampus.communicator;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import eu.trentorise.smartcampus.communicator.model.AppSignature;
 import eu.trentorise.smartcampus.communicator.model.Notification;
 import eu.trentorise.smartcampus.communicator.model.Notifications;
+import eu.trentorise.smartcampus.communicator.model.SyncData;
 import eu.trentorise.smartcampus.communicator.model.UserSignature;
 import eu.trentorise.smartcampus.communicator.util.Constants;
 import eu.trentorise.smartcampus.network.JsonUtils;
@@ -67,7 +72,7 @@ public class CommunicatorConnector {
 	 * @param count
 	 *            number of results (use -1L for all)
 	 * @param token
-	 *            an authorization token
+	 *            a user access token
 	 * @return
 	 * @throws CommunicatorConnectorException
 	 */
@@ -97,7 +102,7 @@ public class CommunicatorConnector {
 	 * @param id
 	 *            a notification id
 	 * @param token
-	 *            an authorization token
+	 *            a user access token
 	 * @return
 	 * @throws CommunicatorConnectorException
 	 */
@@ -115,6 +120,97 @@ public class CommunicatorConnector {
 		}
 	}
 
+	/**
+	 * Synchronize notification data per app
+	 * 
+	 * @param syncData
+	 * 			  data to synchronize: should contain set of notification IDs to delete in 'deleted' property
+	 *            and a set of notifications to be updated.
+	 * @param token
+	 *            a user access token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
+	public SyncData syncNotificationsByApp(SyncData syncData, String token) throws CommunicatorConnectorException {
+		assert syncData != null;
+		try {
+			String body = convertSyncRequest(syncData);
+			String resp = RemoteConnector.postJSON(communicatorURL,
+					Constants.BYAPP + appId + "/" + Constants.NOTIFICATION
+							+ "/sync", body, token, Collections.<String,Object>singletonMap("since", syncData.getVersion()));
+
+			SyncData res = convertSyncResponse(resp);
+			return res;
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+	/**
+	 * Synchronize notification data per app
+	 * 
+	 * @param syncData
+	 * 			  data to synchronize: should contain set of notification IDs to delete in 'deleted' property
+	 *            and a set of notifications to be updated.
+	 * @param token
+	 *            a user access token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
+	public SyncData syncNotificationsByUser(SyncData syncData, String token) throws CommunicatorConnectorException {
+		assert syncData != null;
+		try {
+			String body = convertSyncRequest(syncData);
+			String resp = RemoteConnector.postJSON(communicatorURL,
+					Constants.BYUSER + Constants.NOTIFICATION
+							+ "/sync", body, token, Collections.<String,Object>singletonMap("since", syncData.getVersion()));
+
+			SyncData res = convertSyncResponse(resp);
+			return res;
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private SyncData convertSyncResponse(String resp) {
+		Map<String, Object> map;
+		map = JsonUtils.toObject(resp, Map.class);
+		SyncData res = new SyncData();
+		res.setVersion(Long.parseLong(map.get("version")+""));
+		Map resMap = map.containsKey("deleted") ? (Map)map.get("deleted") : Collections.emptyMap();
+		List<String> deletedList = (List<String>) resMap.get(Notification.class.getName());
+		if (deletedList != null) {
+			Set<String> set = new HashSet<String>();
+			set.addAll(deletedList);
+			res.setDeleted(set);
+		}
+		resMap = map.containsKey("updated") ? (Map)map.get("updated") : Collections.emptyMap();
+		List<Map> updatedList = (List<Map>) resMap.get(Notification.class.getName());
+		if (updatedList != null) {
+			Set<Notification> set = new HashSet<Notification>();
+			for (Map nm : updatedList) {
+				set.add(JsonUtils.convert(nm, Notification.class));
+			}
+			res.setUpdated(set);
+		}
+		return res;
+	}
+
+	private String convertSyncRequest(SyncData syncData) {
+		Map<String, Set<String>> deleted = new HashMap<String, Set<String>>();
+		deleted.put(Notification.class.getName(), syncData.getDeleted());
+		Map<String,Set<Notification>> updated = new HashMap<String, Set<Notification>>();
+		updated.put(Notification.class.getName(), syncData.getUpdated());
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("version", syncData.getVersion());
+		map.put("deleted", deleted);
+		map.put("updated", updated);
+		
+		String body =  JsonUtils.toJSON(map);
+		return body;
+	}
+	
+	
 	/**
 	 * Update a notification (only starred and labelIds values are currently
 	 * updated) per user per app
@@ -471,6 +567,7 @@ public class CommunicatorConnector {
 	 *            an authorization token
 	 * @throws CommunicatorConnectorException
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> requestUserConfigurationToPush(String appid,
 			String token) throws CommunicatorConnectorException {
 		try {
@@ -497,6 +594,7 @@ public class CommunicatorConnector {
 	 *            an authorization token
 	 * @throws CommunicatorConnectorException
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> requestPublicConfigurationToPush(String appid,
 			String token) throws CommunicatorConnectorException {
 		try {

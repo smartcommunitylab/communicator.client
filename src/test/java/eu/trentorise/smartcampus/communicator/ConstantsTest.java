@@ -21,14 +21,14 @@ package eu.trentorise.smartcampus.communicator;
  */
 public class ConstantsTest {
 //	
-	static final String USER_AUTH_TOKEN = "17f1a195-53eb-4719-b607-c7a6dec3d2a9";
-	static final String CLIENT_AUTH_TOKEN = "1ec2d449-6e9a-452e-96cb-7a6725711913";
+	static final String USER_AUTH_TOKEN = "";
+	static final String CLIENT_AUTH_TOKEN = "";
 
 
 
-	static final String BASIC_PROFILE_SRV_URL = "https://vas-dev.smartcampuslab.it/";
+	static final String BASIC_PROFILE_SRV_URL = "https://vas-dev.smartcampuslab.it/aac";
 	static final String COMMUNICATOR_SRV_URL = "https://vas-dev.smartcampuslab.it/core.communicator/";
-	static final String APPID = "testcommunicator";
+	static final String APPID = "core.territory";
 
 //	static final String USER_AUTH_TOKEN = "dedfa267-4adc-4b34-9740-16e9ec0636fc";
 //	static final String CLIENT_AUTH_TOKEN = "98a05b9a-f240-4dac-86e2-af5778e30af4";

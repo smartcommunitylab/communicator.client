@@ -80,8 +80,7 @@ public class TestClientApp {
 		
 		
 		List<String> users = new ArrayList<String>();
-		users.add("6");
-		users.add("6");
+		users.add("1");
 
 		Notification notification = new Notification();
 		notification.setTitle("Test notification");
