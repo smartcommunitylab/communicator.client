@@ -45,6 +45,23 @@ public class CommunicatorConnector {
 	 * 
 	 * @param serverURL
 	 *            address of the server to connect to
+	 * @throws Exception
+	 */
+	public CommunicatorConnector(String serverURL)
+			throws Exception {
+		if (serverURL != null && serverURL.compareTo("") != 0) {
+			this.communicatorURL = serverURL;
+			if (!communicatorURL.endsWith("/"))
+				communicatorURL += '/';
+		} else {
+			throw new Exception("Parameters not setted");
+		}
+	}	
+	
+	/**
+	 * 
+	 * @param serverURL
+	 *            address of the server to connect to
 	 * @param appId
 	 *            name of app registered on smartcampus portal
 	 * @throws Exception
