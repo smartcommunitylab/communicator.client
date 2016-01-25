@@ -77,6 +77,40 @@ public class CommunicatorConnector {
 			throw new Exception("Parameters not setted");
 		}
 	}
+	
+	// "/public/notification/{capp}")
+	/**
+	 * Get notifications per user per app
+	 * 
+	 * @param since
+	 *            since date, in milliseconds (use 0L for every time)
+	 * @param position
+	 *            position in the result set
+	 * @param count
+	 *            number of results (use -1L for all)
+	 * @param token
+	 *            a user access token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
+	public Notifications getPublicNotificationsByApp(Long since, Integer position,
+			Integer count, String token) throws CommunicatorConnectorException {
+		try {
+
+			Map<String, Object> map = new TreeMap<String, Object>();
+			map.put("since", since);
+			map.put("position", position);
+			map.put("count", count);
+
+			String resp = RemoteConnector.getJSON(communicatorURL,
+					Constants.BYAPP + "/" + Constants.PUBLIC + "/" + Constants.NOTIFICATION + "/" + appId,
+					token, map);
+
+			return JsonUtils.toObject(resp, Notifications.class);
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}	
 
 	// "/{capp}/notification")
 	/**
