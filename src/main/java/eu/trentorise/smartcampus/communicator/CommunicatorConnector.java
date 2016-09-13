@@ -63,7 +63,7 @@ public class CommunicatorConnector {
 	 * @param serverURL
 	 *            address of the server to connect to
 	 * @param appId
-	 *            name of app registered on smartcampus portal
+	 *            name of app registered on portal
 	 * @throws Exception
 	 */
 	public CommunicatorConnector(String serverURL, String appId)
@@ -423,7 +423,7 @@ public class CommunicatorConnector {
 	 *            Object with list of key/value parameters for
 	 *            configuration,public or private
 	 * @param appid
-	 *            name of app registered on smartcampus portal
+	 *            name of app registered
 	 * @param token
 	 *            an authorization token
 	 * @return
@@ -453,7 +453,7 @@ public class CommunicatorConnector {
 	 * @param signature
 	 *            Object with list of key/value parameters for configuration
 	 * @param appid
-	 *            name of app registered on smartcampus portal
+	 *            name of app registered
 	 * @param token
 	 *            an authorization token
 	 * @return
@@ -476,6 +476,40 @@ public class CommunicatorConnector {
 		}
 	}
 
+	// "/register/user/{appid}/user")
+		/**
+		 * The method permit the user to receive the push notifications.After
+		 * calling ,in android app, le GCM library to receive the RegistrationId,
+		 * the user must send it to the Communicator Service *
+		 * 
+		 * @param signature
+		 *            Object with list of key/value parameters for configuration
+		 * @param appId
+		 *            name of app registered
+		 * @param userId
+		 *            id of the user
+		 * @param token
+		 *            an authorization token
+		 * @return
+		 * @throws CommunicatorConnectorException
+		 */
+		public boolean registerUserToPush(UserSignature signature, String appId, String userId,
+				String token) throws CommunicatorConnectorException {
+			try {
+
+//				RemoteConnector.postJSON(communicatorURL, "register/"
+//						+ Constants.BYUSER + appid,
+//						new JSONObject(signature.toMap()).toString(), token);
+				RemoteConnector.postJSON(communicatorURL, "register/appuser" +
+						appId + "/"+ userId,
+						JsonUtils.toJSON(signature), token);
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new CommunicatorConnectorException(e);
+			}
+		}
+	
 	// /unregister/user/{appId}/{userid}")
 	/**
 	 * The method allows the cancellation of the registration to the
@@ -484,7 +518,7 @@ public class CommunicatorConnector {
 	 * 
 	 * 
 	 * @param appid
-	 *            name of app registered on smartcampus portal
+	 *            name of app registered
 	 * @param token
 	 *            an authorization token
 	 * @return
@@ -502,6 +536,33 @@ public class CommunicatorConnector {
 		}
 	}
 
+	// /unregister/user/{appId}/{userid}")
+	/**
+	 * The method allows the cancellation of the registration to the
+	 * Communicator Service,the user must specify the app setted at the
+	 * registration
+	 * 
+	 * 
+	 * @param appId
+	 *            name of app registered
+	 * @param userId
+	 *            id of the user to unregister
+	 * @param token
+	 *            an authorization token
+	 * @return
+	 * @throws CommunicatorConnectorException
+	 */
+	public void unregisterUserToPush(String appId, String userId, String token)
+			throws CommunicatorConnectorException {
+		try {
+
+			RemoteConnector.deleteJSON(communicatorURL, "unregister/appuser"
+					+ appId +"/"+userId, token);
+
+		} catch (Exception e) {
+			throw new CommunicatorConnectorException(e);
+		}
+	}
 	// /unregister/app/{appId}")
 	/**
 	 * The method allows the cancellation of the app account to the Communicator
