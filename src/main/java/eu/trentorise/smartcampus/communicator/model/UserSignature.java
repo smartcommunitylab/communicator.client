@@ -45,12 +45,10 @@ public class UserSignature {
 	}
 
 	/**
-	 * @param json
-	 * @return
-	 * @throws IOException
-	 * @throws JSONException
+	 * @param json string representation of the object
+	 * @return {@link NotificationAuthor} structure
 	 */
-	public static UserSignature valueOf(String json) throws IOException {
+	public static UserSignature valueOf(String json) {
 		try {
 			JSONObject o = new JSONObject(json);
 			UserSignature userSignature = new UserSignature();

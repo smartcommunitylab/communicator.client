@@ -45,16 +45,15 @@ public class CommunicatorConnector {
 	 * 
 	 * @param serverURL
 	 *            address of the server to connect to
-	 * @throws Exception
+	 * @throws IllegalArgumentException in case of incorrect serverURL parameter value 
 	 */
-	public CommunicatorConnector(String serverURL)
-			throws Exception {
+	public CommunicatorConnector(String serverURL) {
 		if (serverURL != null && serverURL.compareTo("") != 0) {
 			this.communicatorURL = serverURL;
 			if (!communicatorURL.endsWith("/"))
 				communicatorURL += '/';
 		} else {
-			throw new Exception("Parameters not setted");
+			throw new IllegalArgumentException("Parameters not setted");
 		}
 	}	
 	
@@ -64,17 +63,16 @@ public class CommunicatorConnector {
 	 *            address of the server to connect to
 	 * @param appId
 	 *            name of app registered on portal
-	 * @throws Exception
+	 * @throws IllegalArgumentException in case of incorrect serverURL parameter value 
 	 */
-	public CommunicatorConnector(String serverURL, String appId)
-			throws Exception {
+	public CommunicatorConnector(String serverURL, String appId) {
 		if (serverURL != null && serverURL.compareTo("") != 0) {
 			this.communicatorURL = serverURL;
 			if (!communicatorURL.endsWith("/"))
 				communicatorURL += '/';
 			this.setAppId(appId);
 		} else {
-			throw new Exception("Parameters not setted");
+			throw new IllegalArgumentException("Parameters not setted");
 		}
 	}
 	
@@ -90,8 +88,8 @@ public class CommunicatorConnector {
 	 *            number of results (use -1L for all)
 	 * @param token
 	 *            a user access token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return {@link Notifications} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public Notifications getPublicNotificationsByApp(Long since, Integer position,
 			Integer count, String token) throws CommunicatorConnectorException {
@@ -124,8 +122,8 @@ public class CommunicatorConnector {
 	 *            number of results (use -1L for all)
 	 * @param token
 	 *            a user access token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return {@link Notifications} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public Notifications getNotificationsByApp(Long since, Integer position,
 			Integer count, String token) throws CommunicatorConnectorException {
@@ -154,8 +152,8 @@ public class CommunicatorConnector {
 	 *            a notification id
 	 * @param token
 	 *            a user access token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return {@link Notification} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public Notification getNotificationByApp(String id, String token)
 			throws CommunicatorConnectorException {
@@ -179,8 +177,8 @@ public class CommunicatorConnector {
 	 *            and a set of notifications to be updated.
 	 * @param token
 	 *            a user access token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return {@link SyncData} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public SyncData syncNotificationsByApp(SyncData syncData, String token) throws CommunicatorConnectorException {
 		assert syncData != null;
@@ -204,8 +202,8 @@ public class CommunicatorConnector {
 	 *            and a set of notifications to be updated.
 	 * @param token
 	 *            a user access token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return  {@link SyncData} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public SyncData syncNotificationsByUser(SyncData syncData, String token) throws CommunicatorConnectorException {
 		assert syncData != null;
@@ -272,7 +270,7 @@ public class CommunicatorConnector {
 	 *            the id of the notification to update
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	// /{capp}/notification/{id}
 	public void updateByApp(Notification notification, String id, String token)
@@ -294,7 +292,7 @@ public class CommunicatorConnector {
 	 *            the id of the notification to delete
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	// //{capp}/notification/{id}
 	public void deleteByApp(String id, String token)
@@ -320,8 +318,8 @@ public class CommunicatorConnector {
 	 *            number of results (use -1L for all)
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return {@link Notifications} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	// /user/notification
 	public Notifications getNotificationsByUser(Long since, Integer position,
@@ -350,8 +348,8 @@ public class CommunicatorConnector {
 	 *            a notification id
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return {@link Notification} structure
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public Notification getNotificationByUser(String id, String token)
 			throws CommunicatorConnectorException {
@@ -377,7 +375,7 @@ public class CommunicatorConnector {
 	 *            the id of the notification to update
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	// /user/notification/{id}
 	public void updateByUser(Notification notification, String id, String token)
@@ -398,7 +396,7 @@ public class CommunicatorConnector {
 	 *            the id of the notification to delete
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	// //user/notification/{id}
 	public void deleteByUser(String id, String token)
@@ -426,8 +424,8 @@ public class CommunicatorConnector {
 	 *            name of app registered
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return true in case of successful registration
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public boolean registerApp(AppSignature signature, String appid,
 			String token) throws CommunicatorConnectorException {
@@ -456,8 +454,8 @@ public class CommunicatorConnector {
 	 *            name of app registered
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @return true in case of successful registration
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public boolean registerUserToPush(UserSignature signature, String appid,
 			String token) throws CommunicatorConnectorException {
@@ -490,8 +488,8 @@ public class CommunicatorConnector {
 		 *            id of the user
 		 * @param token
 		 *            an authorization token
-		 * @return
-		 * @throws CommunicatorConnectorException
+		 * @return true in case of successful registration
+		 * @throws CommunicatorConnectorException in case of server error
 		 */
 		public boolean registerUserToPush(UserSignature signature, String appId, String userId,
 				String token) throws CommunicatorConnectorException {
@@ -500,7 +498,7 @@ public class CommunicatorConnector {
 //				RemoteConnector.postJSON(communicatorURL, "register/"
 //						+ Constants.BYUSER + appid,
 //						new JSONObject(signature.toMap()).toString(), token);
-				RemoteConnector.postJSON(communicatorURL, "register/appuser" +
+				RemoteConnector.postJSON(communicatorURL, "register/appuser/" +
 						appId + "/"+ userId,
 						JsonUtils.toJSON(signature), token);
 				return true;
@@ -517,12 +515,11 @@ public class CommunicatorConnector {
 	 * registration
 	 * 
 	 * 
-	 * @param appid
+	 * @param appId
 	 *            name of app registered
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public void unregisterUserToPush(String appId, String token)
 			throws CommunicatorConnectorException {
@@ -549,14 +546,13 @@ public class CommunicatorConnector {
 	 *            id of the user to unregister
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public void unregisterUserToPush(String appId, String userId, String token)
 			throws CommunicatorConnectorException {
 		try {
 
-			RemoteConnector.deleteJSON(communicatorURL, "unregister/appuser"
+			RemoteConnector.deleteJSON(communicatorURL, "unregister/appuser/"
 					+ appId +"/"+userId, token);
 
 		} catch (Exception e) {
@@ -570,8 +566,7 @@ public class CommunicatorConnector {
 	 * 
 	 * @param token
 	 *            an authorization token
-	 * @return
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public void unregisterAppToPush(String token)
 			throws CommunicatorConnectorException {
@@ -598,7 +593,7 @@ public class CommunicatorConnector {
 	 *            a list of user Ids
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	public void sendAppNotification(Notification notification, String appId,
 			List<String> users, String token)
@@ -652,14 +647,15 @@ public class CommunicatorConnector {
 	 *            an application id
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @return {@link AppSignature} structure           
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
-	public AppSignature requestAppConfigurationToPush(String appid,
+	public AppSignature requestAppConfigurationToPush(String appId,
 			String token) throws CommunicatorConnectorException {
 		try {
 
 			String resp = RemoteConnector.getJSON(communicatorURL,
-					"configuration/" + Constants.BYAPP + appid, token);
+					"configuration/" + Constants.BYAPP + appId, token);
 
 			return JsonUtils.toObject(resp,AppSignature.class);
 
@@ -677,15 +673,16 @@ public class CommunicatorConnector {
 	 *            an application id
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @return map of configuration parameters           
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> requestUserConfigurationToPush(String appid,
+	public Map<String, Object> requestUserConfigurationToPush(String appId,
 			String token) throws CommunicatorConnectorException {
 		try {
 
 			String resp = RemoteConnector.getJSON(communicatorURL,
-					"configuration/" + Constants.BYUSER + appid, token);
+					"configuration/" + Constants.BYUSER + appId, token);
 
 			return JsonUtils.toObject(resp,Map.class);
 
@@ -704,15 +701,16 @@ public class CommunicatorConnector {
 	 *            an application id
 	 * @param token
 	 *            an authorization token
-	 * @throws CommunicatorConnectorException
+	 * @return map of configuration parameters           
+	 * @throws CommunicatorConnectorException in case of server error
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, Object> requestPublicConfigurationToPush(String appid,
+	public Map<String, Object> requestPublicConfigurationToPush(String appId,
 			String token) throws CommunicatorConnectorException {
 		try {
 
 			String resp = RemoteConnector.getJSON(communicatorURL,
-					"configuration/public/" + appid, token);
+					"configuration/public/" + appId, token);
 
 			return JsonUtils.toObject(resp,Map.class);
 

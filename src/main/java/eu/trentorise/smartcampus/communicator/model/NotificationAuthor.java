@@ -45,9 +45,8 @@ public class NotificationAuthor implements Serializable {
 	}
 
 	/**
-	 * @param json
-	 * @return
-	 * @throws JSONException
+	 * @param json string representation of the object
+	 * @return {@link NotificationAuthor} structure
 	 */
 	public static NotificationAuthor valueOf(String json) {
 		try {
