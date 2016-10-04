@@ -15,7 +15,6 @@
  */
 package eu.trentorise.smartcampus.communicator.model;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -28,6 +27,8 @@ public class UserSignature {
 
 	private String registrationId;
 
+	private String platform;
+	
 	public String getAppName() {
 		return appName;
 	}
@@ -43,6 +44,14 @@ public class UserSignature {
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
 	}
+	
+	public String getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
 
 	/**
 	 * @param json string representation of the object
@@ -55,6 +64,9 @@ public class UserSignature {
 			userSignature.setAppName(o.getString("appName"));
 			userSignature.setRegistrationId(o.getString("registrationId"));
 
+			if (o.has("platform")) {
+				userSignature.setPlatform(o.getString("platform"));
+			}
 			return userSignature;
 		} catch (JSONException e) {
 			return null;
@@ -71,8 +83,12 @@ public class UserSignature {
 		Map<Object, Object> returnMap = new TreeMap<Object, Object>();
 		returnMap.put("appName", getAppName());
 		returnMap.put("registrationId", getRegistrationId());
+		if (getPlatform() != null) {
+			returnMap.put("platform", getPlatform());
+		}
 
 		return returnMap;
 	}
 
+	
 }
